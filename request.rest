@@ -4,5 +4,24 @@ GET http://localhost:4000
 
 
 ###
-GET http://localhost:4000/
+GET http://localhost:4000/Posts
 
+
+###
+
+POST http://localhost:4000/Posts/getAllPosts
+
+###
+
+POST http://localhost:4000/Posts
+Content-Type: application/json
+
+{
+    "author": "Rotem",
+    "title":"FIRST POST BY ROTEM",
+    "content":"I DONT LOVE DOING THIS BLINDLY"
+
+
+    
+   
+}
