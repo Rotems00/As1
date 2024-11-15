@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongodb": "^6.10.0",
+    "mongoose": "^8.8.1",
+    "node": "^18.20.5"
+  },
+  "name": "ourapp",
+  "version": "1.0.0",
+  "description": "\"Rotems and Shons app\"",
+  "main": "index.js",
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js",
+    "devstart": "nodemon app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Rotems00/As1.git"
+  },
+  "author": "Shon Hason & Rotem Ziv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Rotems00/As1/issues"
+  },
+  "homepage": "https://github.com/Rotems00/As1#readme"
+}
