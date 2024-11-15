@@ -1,0 +1,91 @@
+/* Reset basic styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif; /* Fun, playful font */
+    background-color: #ffefc1; /* Soft yellow background */
+    color: #333;
+    line-height: 1.6;
+    background-image: url('paw-print-bg.png'); /* Add a repeating paw-print background if available */
+    background-size: contain;
+    background-repeat: repeat;
+}
+
+/* Header Styles */
+header {
+    background-color: #ffa07a; /* Warm peachy color */
+    color: #fff;
+    padding: 1.5em;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+header h1 {
+    font-size: 2.5rem;
+    margin-bottom: 0.5em;
+    color: #3b2f2f; /* Dark brown for warmth */
+}
+
+nav a {
+    color: #fff;
+    margin: 0 1em;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
+    font-size: 1.2rem;
+}
+
+nav a:hover {
+    color: #ffdab9; /* Lighter peach hover */
+}
+
+/* Section Styles */
+section {
+    max-width: 800px;
+    margin: 2em auto;
+    padding: 2em;
+    background-color: #fffaf0; /* Soft, warm background */
+    border-radius: 20px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    border: 3px dashed #ffb347; /* Fun dashed border */
+}
+
+/* Titles */
+h2 {
+    color: #ff8c42; /* Bright, playful orange */
+    margin-bottom: 0.5em;
+    font-size: 2rem;
+}
+
+/* Paragraph Text */
+p {
+    margin-bottom: 1em;
+    color: #555;
+    font-size: 1.1rem;
+}
+
+/* List in Projects Section */
+ul {
+    list-style-type: disc;
+    padding-left: 1.5em;
+    margin-bottom: 1em;
+}
+
+li {
+    margin-bottom: 0.5em;
+    color: #3b2f2f;
+}
+
+/* Footer Styles */
+footer {
+    text-align: center;
+    padding: 1em;
+    background-color: #ffa07a; /* Matching the header */
+    color: #fff;
+    margin-top: 2em;
+    font-size: 1rem;
+}
