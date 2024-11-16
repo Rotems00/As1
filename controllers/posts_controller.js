@@ -1,3 +1,4 @@
+const { post } = require("../app.js")
 const postsModel = require("../modules/posts_model.js")
 
 const createPost = async (req, res) => {
@@ -61,10 +62,14 @@ const getPostByID = async (req, res) => {
 }
 
 
+
 module.exports = {
-    createPost, getAllPosts, getPostByID
+    createPost, getAllPosts, getPostByID}
+
+
 }
 
+module.exports = {createPost,getAllPosts,changeContentOfPost}
 
 
 
