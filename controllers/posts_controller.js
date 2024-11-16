@@ -60,25 +60,9 @@ const getPostByID = async (req, res) => {
 
 }
 
-const getPostsBySender = async (req, res) => {
-    try {
-        const Sender = req.params.author; // Extract the 'author' parameter from the URL
-        const authorPosts = await postsModel.find({ author: Sender }); // Query posts by author
 
-        if (authorPosts.length === 0) {
-            return res.status(404).send("No posts found for this author");
-        }
-
-        console.log(authorPosts); // Log the retrieved posts
-        res.status(200).json(authorPosts); // Send the posts as JSON
-
-    } catch (error) {
-        console.error(error); // Log the error for debugging
-        res.status(500).send("Couldn't retrieve posts due to an error");
-    }
-}
 module.exports = {
-    createPost, getAllPosts, getPostByID, getPostsBySender
+    createPost, getAllPosts, getPostByID
 }
 
 
