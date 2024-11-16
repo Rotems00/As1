@@ -8,9 +8,9 @@ const createPost = async (req, res) => {
             title: req.body.title,
             content: req.body.content
         })
-        console.log(newPost)
-        res.status(201).send(" NEW POST CREATED")
-
+        console.log("NEW POST CREATED")
+        console.log(req.body)
+        res.status(201).send(" NEW POST CREATED : author : " + newPost.author )
 
 
 
@@ -23,22 +23,23 @@ const createPost = async (req, res) => {
 }
 
 const getAllPosts = async (req, res) => {
-    const authorFilter = req.query
+    const authorFilter = req.query.author
     console.log(authorFilter)
     try {
         if(authorFilter){
-            const authorPosts = await postsModel.find({author : authorFilter.author})
+            const authorPosts = await postsModel.find({author : authorFilter})
             console.log(authorPosts)
-            return res.send(authorPosts)
+            return res.status(200).send(authorPosts)
         }
         else{
             const allPosts = await postsModel.find()
+            console.log("CATCH ME ")
             console.log(allPosts)
             return res.status(201).send(allPosts)
         }
 
     } catch (error) {
-        res.status(400).send("COULDNT GET ALL POST! DUE TO AN ERROR")
+        res.status(400).send("COULDNT GET ALL POST! DUE TO AN ERROR , THERES NO SUCH A POST!")
     }
 
 
@@ -51,7 +52,7 @@ const getPostByID = async (req, res) => {
         const askedID = req.params._id
         const singlePost = await postsModel.findById(askedID)
         console.log(singlePost)
-        res.status(201).send(" Happy TO GET Specific ALL POSTS")
+        res.status(201).send("Specific POST by " +  singlePost.author)
 
 
 
@@ -61,15 +62,45 @@ const getPostByID = async (req, res) => {
 
 }
 
+const changeContentOfPost = async(req,res)=>{
+const askerID = req.params._id
+const newContent = req.body.content
+try{
+    const postToUpdate = await postsModel.findByIdAndUpdate(askerID,{content: newContent,new:true})
+    if(!postToUpdate)
+    {
+       return res.status(400).send("COULD NOT UPDATE POST DUE TO AN ERROR IN MONGO, COULDNT FIND THE POST!")
+    }
+    console.log(postToUpdate)
+    return res.status(200).send("CHANGED POST!")
 
 
-module.exports = {
-    createPost, getAllPosts, getPostByID}
+
+
+}catch(error){
+res.status(400).send("COULD NOT UPDATE POST DUE TO AN ERROR!")
 
 
 }
 
-module.exports = {createPost,getAllPosts,changeContentOfPost}
+
+
+
+
+
+
+
+
+}
+
+
+
+
+
+
+
+
+module.exports = {createPost,getAllPosts,changeContentOfPost,getPostByID}
 
 
 

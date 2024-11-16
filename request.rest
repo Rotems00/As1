@@ -19,9 +19,9 @@ POST http://localhost:4000/Posts
 Content-Type: application/json
 
 {
-    "author": "AVIV",
+    "author": "YOSSI",
     "title":"MY FIRST POST",
-    "content":"I LIKE TO WRITE"
+    "content":"I LIKE TO WRITE and just made new"
 
 
     
@@ -30,17 +30,20 @@ Content-Type: application/json
 ###
 
 
-GET http://localhost:4000/Posts/6738aa598b7dc51e26a9ae3c
+GET http://localhost:4000/Posts/6738e28726f0618758d20437
 
 ###
 GET http://localhost:4000/Posts?author=YOSSI
 
-PUT http://localhost:4000/Posts/6737a9b8eb4a833cd46a98f1
+
+###
+
+PUT http://localhost:4000/Posts/6738e6e8237f69137a275ea1
 Content-Type: application/json
 
 {
-    "_id" : "6737b959ef1a9ed12f9a1fef",
-    "content": "CONTENT CHANGED AFTER PUT REQUEST"
+    "_id" : "6738e6e8237f69137a275ea1",
+    "content": "PUT REQUEST ENDED + "
 
 }
 
