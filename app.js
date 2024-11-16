@@ -21,11 +21,7 @@ app.use(bodyParser.urlencoded({extended:true}))
 const port = process.env.PORT;
 const postsRoutes = require("./routes/posts_routes.js")
 const Posts = require("./modules/posts_model.js")
-Posts.create({
-    author:"YOSSI",
-    title:"KKK",
-    content:"TUTYYU"
-})
+
 
 
 
