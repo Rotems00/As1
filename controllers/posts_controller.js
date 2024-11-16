@@ -1,3 +1,4 @@
+const { post } = require("../app.js")
 const postsModel = require("../modules/posts_model.js")
 
 const createPost = async(req,res)=>{
@@ -40,8 +41,30 @@ const getAllPosts = async(req,res)=>{
 
 }
 
-module.exports = {createPost,getAllPosts}
+const changeContentOfPost = async(req,res)=>{
+    try{
+        const askerID = req.params._id;
+        const newContent = req.body.content;
+        const updatedPost = await postsModel.findByIdAndUpdate(
+            askerID,
+            {content:newContent},
+            {new:true}
+        )
+        if(!updatedPost)
+        {
+          res.status(400).send("YOU FORGOT TO UPLOAD A NEW CONTENT")
+        }
+        res.status(200).send(updatedPost)
+        
+        
 
+    }catch(error)
+    {
+        res.status(400).send("COULDNT CHANGE CONTENT! DUE TO AN ERROR")
+    }
+}
+
+module.exports = {createPost,getAllPosts,changeContentOfPost}
 
 
 

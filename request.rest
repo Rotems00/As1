@@ -25,3 +25,16 @@ Content-Type: application/json
     
    
 }
+###
+
+PUT http://localhost:4000/Posts/6737a9b8eb4a833cd46a98f1
+Content-Type: application/json
+
+{
+    "_id" : "6737b959ef1a9ed12f9a1fef",
+    "content": "CONTENT CHANGED AFTER PUT REQUEST"
+
+
+
+
+}
