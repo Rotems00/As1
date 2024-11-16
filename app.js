@@ -22,9 +22,9 @@ const port = process.env.PORT;
 const postsRoutes = require("./routes/posts_routes.js")
 const Posts = require("./modules/posts_model.js")
 Posts.create({
-    author:"SHON",
-    title:"IDK",
-    content:"123123123123WDSJSDKFHJSDKF"
+    author:"YOSSI",
+    title:"KKK",
+    content:"TUTYYU"
 })
 
 
@@ -34,6 +34,8 @@ app.get('/',(req,res)=>{
 
 
 );
+
+
 app.use('/Posts', postsRoutes);
 
 
@@ -45,6 +47,8 @@ app.listen(port,()=>{
 
 }
 );
+
+
 
 module.exports = app;
 

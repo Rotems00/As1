@@ -1,37 +1,42 @@
 const postsModel = require("../modules/posts_model.js")
 
-const createPost = async(req,res)=>{
-    try{
+const createPost = async (req, res) => {
+    try {
         const newPost = await postsModel.create({
-            author : req.body.author,
-            title:req.body.title,
-            content : req.body.content
+            author: req.body.author,
+            title: req.body.title,
+            content: req.body.content
         })
         console.log(newPost)
-       res.status(201).send(" NEW POST CREATED")
+        res.status(201).send(" NEW POST CREATED")
 
 
 
 
-    }catch(error)
-    {
-       res.status(400).send("NEW POST UNAVAILABLE")
+    } catch (error) {
+        res.status(400).send("NEW POST UNAVAILABLE")
 
 
     }
 
 }
 
-const getAllPosts = async(req,res)=>{
-    try{
-        const allPosts = await postsModel.find()
-        console.log(allPosts)
-        res.status(201).send(" PLEASED TO GET YOU ALL POSTS")
+const getAllPosts = async (req, res) => {
+    const authorFilter = req.query
+    console.log(authorFilter)
+    try {
+        if(authorFilter){
+            const authorPosts = await postsModel.find({author : authorFilter.author})
+            console.log(authorPosts)
+            return res.send(authorPosts)
+        }
+        else{
+            const allPosts = await postsModel.find()
+            console.log(allPosts)
+            return res.status(201).send(allPosts)
+        }
 
-
-
-    }catch(error)
-    {
+    } catch (error) {
         res.status(400).send("COULDNT GET ALL POST! DUE TO AN ERROR")
     }
 
@@ -40,7 +45,41 @@ const getAllPosts = async(req,res)=>{
 
 }
 
-module.exports = {createPost,getAllPosts}
+const getPostByID = async (req, res) => {
+    try {
+        const askedID = req.params._id
+        const singlePost = await postsModel.findById(askedID)
+        console.log(singlePost)
+        res.status(201).send(" Happy TO GET Specific ALL POSTS")
+
+
+
+    } catch (error) {
+        res.status(400).send("COULDNT GET ALL POST! DUE TO AN ERROR")
+    }
+
+}
+
+const getPostsBySender = async (req, res) => {
+    try {
+        const Sender = req.params.author; // Extract the 'author' parameter from the URL
+        const authorPosts = await postsModel.find({ author: Sender }); // Query posts by author
+
+        if (authorPosts.length === 0) {
+            return res.status(404).send("No posts found for this author");
+        }
+
+        console.log(authorPosts); // Log the retrieved posts
+        res.status(200).json(authorPosts); // Send the posts as JSON
+
+    } catch (error) {
+        console.error(error); // Log the error for debugging
+        res.status(500).send("Couldn't retrieve posts due to an error");
+    }
+}
+module.exports = {
+    createPost, getAllPosts, getPostByID, getPostsBySender
+}
 
 
 
