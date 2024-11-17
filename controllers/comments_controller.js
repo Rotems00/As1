@@ -55,4 +55,28 @@ const readAllCommentsOnSpecifiecPost = async (req,res)=>{
     }
 }
 
-module.exports = {createComment,readAllCommentsOnSpecifiecPost}
+const updateComment = async(req,res)=>{
+    const commentID = req.params._id
+    const newContent = req.body.comment_content
+    try{
+        const commentToUpdate = await commentsModel.findByIdAndUpdate(commentID,{comment_content: newContent,new:true})
+        if(!commentToUpdate)
+        {
+           return res.status(400).send("COULD NOT UPDATE COMMENT DUE TO AN ERROR IN MONGO, COULDNT FIND THE COMMENT!")
+        }
+        console.log(newContent)
+        return res.status(200).send("CHANGED COMMENT!")
+    
+    
+    
+    
+    }catch(error){
+    res.status(400).send("COULD NOT UPDATE COMMENT DUE TO AN ERROR!, ARE YOU SURE U INPUTED THE CORRECT ID ?")
+    
+    
+    }
+
+}
+    
+
+module.exports = {createComment,readAllCommentsOnSpecifiecPost,updateComment}
