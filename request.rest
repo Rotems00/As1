@@ -21,7 +21,7 @@ Content-Type: application/json
 {
     "author": "YOSSI",
     "title":"MY FIRST POST",
-    "content":"I LIKE TO WRITE and just made new"
+    "content":"NEW 6"
 
 
     
@@ -47,3 +47,16 @@ Content-Type: application/json
 
 }
 
+###
+POST http://localhost:4000/Comments
+Content-Type: application/json
+
+{
+    "comment_user":"IDO",
+    "title":"I HAVE YOSSI",
+    "comment_content" : " FUCK YOSSI TWICE",
+    "post_id": "6739be0f340fb9754a806fb8" 
+
+    
+   
+}
