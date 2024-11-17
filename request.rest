@@ -21,7 +21,7 @@ Content-Type: application/json
 {
     "author": "YOSSI",
     "title":"MY FIRST POST",
-    "content":"NEW 6"
+    "content":"NEW 7"
 
 
     
@@ -43,7 +43,7 @@ Content-Type: application/json
 
 {
     "_id" : "6738e6e8237f69137a275ea1",
-    "content": "PUT REQUEST ENDED + "
+    "content": "new post "
 
 }
 
