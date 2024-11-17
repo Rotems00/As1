@@ -54,9 +54,12 @@ Content-Type: application/json
 {
     "comment_user":"IDO",
     "title":"I HAVE YOSSI",
-    "comment_content" : " FUCK YOSSI TWICE",
-    "post_id": "6739be0f340fb9754a806fb8" 
+    "comment_content" : " COMMENT 3",
+    "post_id": "6738e6e8237f69137a275ea1" 
 
     
    
 }
+###
+
+GET http://localhost:4000/Comments/6738e6e8237f69137a275ea1

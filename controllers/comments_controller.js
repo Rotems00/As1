@@ -28,4 +28,31 @@ res.status(200).send("COMMENT CREATED BY :" + req.body.comment_user)
 }
 
 
-module.exports = {createComment}
+const readAllCommentsOnSpecifiecPost = async (req,res)=>{
+
+
+    try{
+        const postID = req.params.post_id;
+
+        const findAllComments = await commentsModel.find({post_id:postID})
+        if(!findAllComments)
+        {
+            res.status(400).send("CANT FIND THAT COMMENT")
+        }
+       console.log(findAllComments)
+        res.status(200).json(findAllComments)
+
+
+
+
+
+
+
+
+    }catch(error)
+    {
+        res.status(400).send("COUDLNT GET COMMENTS DUE TO AN ERROR")
+    }
+}
+
+module.exports = {createComment,readAllCommentsOnSpecifiecPost}
