@@ -5,7 +5,8 @@
     "express": "^4.21.1",
     "mongodb": "^6.10.0",
     "mongoose": "^8.8.1",
-    "node": "^18.20.5"
+    "node": "^18.20.5",
+    "rest": "^2.0.0"
   },
   "name": "ourapp",
   "version": "1.0.0",
@@ -25,5 +26,8 @@
   "bugs": {
     "url": "https://github.com/Rotems00/As1/issues"
   },
-  "homepage": "https://github.com/Rotems00/As1#readme"
+  "homepage": "https://github.com/Rotems00/As1#readme",
+  "devDependencies": {
+    "@types/node": "^22.9.0"
+  }
 }
