@@ -12,7 +12,9 @@ const comment = await commentsModel.create({
     post_id: req.body.post_id
 
 })
+console.log(comment)
 res.status(200).send("COMMENT CREATED BY :" + req.body.comment_user)
+
 
 }catch(error)
 {
@@ -91,3 +93,4 @@ const updateComment = async (req, res) => {
 
        
 module.exports = {createComment,deleteComment,readComments,updateComment}
+

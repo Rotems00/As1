@@ -21,7 +21,6 @@ Content-Type: application/json
     "author": "moshe",
     "title":"pizze",
     "content":"no contnt"
-
 }
 ###
 
@@ -39,7 +38,7 @@ Content-Type: application/json
 
 {
     "_id" : "6738e6e8237f69137a275ea1",
-    "content": "PUT REQUEST ENDED + "
+    "content": "new post "
 
 }
 
@@ -71,3 +70,4 @@ Content-Type: application/json
 }
 ### 
 DELETE http://localhost:4000/Comments/delete/6739c578bdeff3469703430f
+

@@ -4,6 +4,8 @@ const comments = require("../modules/comments_model.js");
 const router = express.Router();
 
 router.post('/', Comment.createComment)
+router.get('/:post_id',Comment.readAllCommentsOnSpecifiecPost)
+router.put('/:_id',Comment.updateComment)
 
 router.delete('/delete/:_id', Comment.deleteComment);
 
