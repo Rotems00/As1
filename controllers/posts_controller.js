@@ -8,8 +8,8 @@ const createPost = async (req, res) => {
             content: req.body.content
         })
         console.log("NEW POST CREATED")
-        console.log(req.body)
-        res.status(201).send(" NEW POST CREATED : author : " + newPost.author )
+        console.log(newPost)
+        res.status(201).send(" NEW POST CREATED : author : " + req.body.author )
 
 
 
