@@ -12,85 +12,95 @@ const comment = await commentsModel.create({
     post_id: req.body.post_id
 
 })
-console.log(comment)
 res.status(200).send("COMMENT CREATED BY :" + req.body.comment_user)
+    
+
 
 
 }catch(error)
 {
     res.status(400).send("COMMENT COULD NOT BE CREATED BY :" +req.body.comment_user )
+
 }
+
+
+
 }
-const deleteComment = async (req, res) => {
-    try {
-      const  id = req.params; // Extract the ID from the URL
-      const deletedComment = await commentsModel.findByIdAndDelete({id}); // Delete the object by ID
-  
-      if (!deletedComment) {
-        return res.status(404).json({ message: 'Comment not found' });
-      }
-  
-      res.status(200).json({ message: 'Comment deleted successfully', deletedComment });
-    } catch (error) {
-      res.status(500).json({ message: 'Error deleting comment', error: error.message });
+
+
+const readAllCommentsOnSpecifiecPost = async (req,res)=>{
+
+
+    try{
+        const postID = req.params.post_id;
+
+        const findAllComments = await commentsModel.find({post_id:postID})
+        if(!findAllComments)
+        {
+            res.status(400).send("CANT FIND THAT COMMENT")
+        }
+       console.log(findAllComments)
+        res.status(200).json(findAllComments)
+
+
+
+
+
+
+
+
+    }catch(error)
+    {
+        res.status(400).send("COUDLNT GET COMMENTS DUE TO AN ERROR")
     }
 }
-        
-const readComments = async (req, res) => {
 
-    const postFilter = req.query.post_id
-    console.log(postFilter)
-    try {
-        if(postFilter){
-            const postComments = await commentsModel.find({ post_id : postFilter})
-            if (postComments.length === 0) {
-                console.log('there are no comments for this post')
-            return res.status(200).send('no comments found')
-            } 
-            console.log('specific post:'+ postComments)
-            return res.status(200).send(postComments)
+const updateComment = async(req,res)=>{
+    const commentID = req.params._id
+    const newContent = req.body.comment_content
+    try{
+        const commentToUpdate = await commentsModel.findByIdAndUpdate(commentID,{comment_content: newContent,new:true})
+        if(!commentToUpdate)
+        {
+           return res.status(400).send("COULD NOT UPDATE COMMENT DUE TO AN ERROR IN MONGO, COULDNT FIND THE COMMENT!")
         }
-        else{
-            const allcomments = await commentsModel.find()
-            console.log("All comments: ")
-            console.log(allcomments)
-            return res.status(201).send(allcomments)
-        }
-
-    } catch (error) {
-        res.status(400).send("Couldnt print all comments")
-    }
-
-}    
-        
-const updateComment = async (req, res) => {
-
-    const comment_id = req.params._id
-    const newContent = req.body.content
-
-
-    try {
-        const commentToUpdate = await commentsModel.findByIdAndUpdate(
-            comment_id,
-            { comment_content: newContent }, // Set new content
-            { new: true } // Return the updated document
-        );       
-            if (commentToUpdate.length === 0) {
-                console.log('there are no comments exist for the comment_id')
-            return res.status(200).send('here are no comments exist for the comment_id')
-            } 
-            console.log('updated comment:'+ commentToUpdate)
-            return res.status(200).send(commentToUpdate)
-        }
-     
-           
+        console.log(newContent)
+        return res.status(200).send("CHANGED COMMENT!")
     
-    catch (error) {
-        res.status(400).send("problem updating post")
+    
+    
+    
+    }catch(error){
+    res.status(400).send("COULD NOT UPDATE COMMENT DUE TO AN ERROR!, ARE YOU SURE U INPUTED THE CORRECT ID ?")
+    
+    
     }
 
-}    
+}
 
+
+const deleteComment = async(req,res)=>
+{
+    const commentID = req.params._id;
+
+    try
+    {
        
-module.exports = {createComment,deleteComment,readComments,updateComment}
+        const theComment = await commentsModel.findByIdAndDelete({_id:commentID})
+        if(!theComment)
+            {
+               return res.status(400).send("THERES NO SUCH A COMMENT IN MY DB, WRONG COMMENT")
+            }
 
+            console.log("DELETED THE COMMENT")
+            return res.status(200).send("COMMENT HAS BEEN DELETED BY YOUR REQUEST!, ID: "+ commentID + theComment.comment_content)
+
+
+    }catch(error)
+    {
+        return res.status(400).send("ERROR")
+    }
+}
+    
+
+module.exports = {createComment,readAllCommentsOnSpecifiecPost,updateComment,deleteComment}

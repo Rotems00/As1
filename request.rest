@@ -68,6 +68,9 @@ Content-Type: application/json
     "_id" : "673f7cba7e1d713764475d45",
     "content": " new content everywhere here "
 }
-### 
-DELETE http://localhost:4000/Comments/delete/6739c578bdeff3469703430f
+
+
+###
+
+DELETE http://localhost:4000/Comments/6739cf496361f33ce1ff1b5d
 
