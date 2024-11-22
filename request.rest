@@ -18,14 +18,14 @@ POST http://localhost:4000/Posts
 Content-Type: application/json
 
 {
-    "author": "moshe",
-    "title":"pizze",
-    "content":"no contnt"
+    "author": "Dina ",
+    "title":"Pijama",
+    "content":"I love pijama"
 }
 ###
 
 
-GET http://localhost:4000/Posts/6738e28726f0618758d20437
+GET http://localhost:4000/Posts/6740c85d55be92f530bb268b
 
 ###
 GET http://localhost:4000/Posts?author=YOSSI
@@ -33,12 +33,12 @@ GET http://localhost:4000/Posts?author=YOSSI
 
 ###
 
-PUT http://localhost:4000/Posts/6738e6e8237f69137a275ea1
+PUT http://localhost:4000/Posts/673a0285731c0b261039fae7
 Content-Type: application/json
 
 {
-    "_id" : "6738e6e8237f69137a275ea1",
-    "content": "new post "
+    "_id" : "673a0285731c0b261039fae7",
+    "content": "CONTENT UPDATED "
 
 }
 
@@ -48,8 +48,8 @@ Content-Type: application/json
 
 {
     "comment_user":"pizza",
-    "title":"i like pizza too",
-    "comment_content" : " pizza is the best forever",
+    "title":"pizza is the best", 
+    "comment_content" : " I love pizza so much ", 
     "post_id": "6739c578bdeff3469703430f" 
 }
 
@@ -58,7 +58,7 @@ GET http://localhost:4000/Comments
 
 
 ###
-GET http://localhost:4000/Comments?post_id=673f79c613d76d7ce47b7723
+GET http://localhost:4000/Comments?post_id=6739c578bdeff3469703430f
 
 ###
 PUT http://localhost:4000/Comments/673f7cba7e1d713764475d45 
@@ -66,11 +66,12 @@ Content-Type: application/json
 
 {
     "_id" : "673f7cba7e1d713764475d45",
-    "content": " new content everywhere here "
+    "comment_content": " new content Date: 2021-09-01 "
 }
 
 
 ###
 
 DELETE http://localhost:4000/Comments/6739cf496361f33ce1ff1b5d
+
 
