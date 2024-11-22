@@ -78,6 +78,36 @@ const updateComment = async(req,res)=>{
 
 }
 
+const readAllComments = async(req,res)=>
+{
+    try
+    {
+        const allCommentsOnDB = await commentsModel.find()
+        if(!allCommentsOnDB)
+        {
+            return res.status(400).send("THERE ARE NO COMMENTS AT ALL")
+        }
+        console.log(allCommentsOnDB)
+        return res.status(200).send("ALL COMMENTS :"+ allCommentsOnDB)
+
+
+
+    }catch(error)
+    {
+        return res.status(400).send("ERROR")
+
+
+
+    }
+
+
+
+
+
+
+
+}
+
 
 const deleteComment = async(req,res)=>
 {
@@ -103,4 +133,4 @@ const deleteComment = async(req,res)=>
 }
     
 
-module.exports = {createComment,readAllCommentsOnSpecifiecPost,updateComment,deleteComment}
+module.exports = {createComment,readAllCommentsOnSpecifiecPost,updateComment,deleteComment,readAllComments}
