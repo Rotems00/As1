@@ -77,6 +77,30 @@ const updateComment = async(req,res)=>{
     }
 
 }
+
+
+const deleteComment = async(req,res)=>
+{
+    const commentID = req.params._id;
+
+    try
+    {
+       
+        const theComment = await commentsModel.findByIdAndDelete({_id:commentID})
+        if(!theComment)
+            {
+               return res.status(400).send("THERES NO SUCH A COMMENT IN MY DB, WRONG COMMENT")
+            }
+
+            console.log("DELETED THE COMMENT")
+            return res.status(200).send("COMMENT HAS BEEN DELETED BY YOUR REQUEST!, ID: "+ commentID + theComment.comment_content)
+
+
+    }catch(error)
+    {
+        return res.status(400).send("ERROR")
+    }
+}
     
 
-module.exports = {createComment,readAllCommentsOnSpecifiecPost,updateComment}
+module.exports = {createComment,readAllCommentsOnSpecifiecPost,updateComment,deleteComment}
