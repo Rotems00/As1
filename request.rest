@@ -14,18 +14,13 @@ GET http://localhost:4000/Posts
 
 
 ###
-
 POST http://localhost:4000/Posts
 Content-Type: application/json
 
 {
-    "author": "YOSSI",
-    "title":"MY FIRST POST",
-    "content":"NEW 6"
-
-
-    
-   
+    "author": "moshe",
+    "title":"pizze",
+    "content":"no contnt"
 }
 ###
 
@@ -43,7 +38,7 @@ Content-Type: application/json
 
 {
     "_id" : "6738e6e8237f69137a275ea1",
-    "content": "PUT REQUEST ENDED + "
+    "content": "new post "
 
 }
 
@@ -52,29 +47,30 @@ POST http://localhost:4000/Comments
 Content-Type: application/json
 
 {
-    "comment_user":"IDO",
-    "title":"I HAVE YOSSI",
-    "comment_content" : " COMMENT 4",
-    "post_id": "6738e6e8237f69137a275ea1" 
-
-    
-   
+    "comment_user":"pizza",
+    "title":"i like pizza too",
+    "comment_content" : " pizza is the best forever",
+    "post_id": "6739c578bdeff3469703430f" 
 }
+
+### 
+GET http://localhost:4000/Comments
+
+
 ###
-
-GET http://localhost:4000/Comments/6738e6e8237f69137a275ea1
+GET http://localhost:4000/Comments?post_id=673f79c613d76d7ce47b7723
 
 ###
-
-PUT http://localhost:4000/Comments/6739cf456361f33ce1ff1b5b
+PUT http://localhost:4000/Comments/673f7cba7e1d713764475d45 
 Content-Type: application/json
 
 {
-    "_id" : "6739cf456361f33ce1ff1b5b",
-    "comment_content": "I CHANGED MY COMMENT!! UPDATE HAPPENED! "
-
+    "_id" : "673f7cba7e1d713764475d45",
+    "content": " new content everywhere here "
 }
+
 
 ###
 
 DELETE http://localhost:4000/Comments/6739cf496361f33ce1ff1b5d
+
