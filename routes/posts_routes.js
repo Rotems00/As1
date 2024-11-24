@@ -7,7 +7,6 @@ const router = express.Router();
 
 router.post('/', Post.createPost)
 router.get('/', Post.getAllPosts)
-
 router.get('/:_id', Post.getPostByID)
 router.put('/:_id',Post.changeContentOfPost )
   

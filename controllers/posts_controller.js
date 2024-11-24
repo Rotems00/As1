@@ -23,16 +23,22 @@ const createPost = async (req, res) => {
 
 const getAllPosts = async (req, res) => {
     const authorFilter = req.query.author
-    console.log(authorFilter)
+    
     try {
         if(authorFilter){
             const authorPosts = await postsModel.find({author : authorFilter})
+            if(authorPosts.length === 0){
+                console.log("NO POSTS AVAILABLE BY " + authorFilter)
+                return res.status(200).send("NO POSTS AVAILABLE BY " + authorFilter)
+            }
             console.log(authorPosts)
             return res.status(200).send(authorPosts)
         }
         else{
             const allPosts = await postsModel.find()
-            console.log("CATCH ME ")
+            if(allPosts.length === 0){
+                return res.status(200).send("NO POSTS AVAILABLE")
+            }
             console.log(allPosts)
             return res.status(201).send(allPosts)
         }

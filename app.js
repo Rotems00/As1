@@ -28,7 +28,7 @@ const Comments = require("./modules/comments_model.js")
 
 app.get('/', (req, res) => {
     console.log("Welcome to the homepage")
-    res.send("HEY ROTEM")
+    res.send("Welcome to the homepage")
 }
 
 

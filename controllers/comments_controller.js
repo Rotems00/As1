@@ -30,17 +30,20 @@ res.status(200).send("COMMENT CREATED BY :" + req.body.comment_user)
 
 const readAllCommentsOnSpecifiecPost = async (req,res)=>{
 
-
+    const postID = req.query.post_id;
     try{
-        const postID = req.params.post_id;
+        
 
         const findAllComments = await commentsModel.find({post_id:postID})
-        if(!findAllComments)
+        
+        if(!findAllComments || findAllComments.length === 0)
         {
-            res.status(400).send("CANT FIND THAT COMMENT")
+            console.log("THERE ARE NO COMMENTS ON THIS POST ID")
+            return res.status(400).send("THERE ARE NO COMMENTS ON THIS POST ID")
         }
+       
        console.log(findAllComments)
-        res.status(200).json(findAllComments)
+       return  res.status(200).json(findAllComments)
 
 
 
@@ -83,6 +86,10 @@ const readAllComments = async(req,res)=>
     try
     {
         const allCommentsOnDB = await commentsModel.find()
+        if(allCommentsOnDB.length === 0)
+        {
+            return res.status(400).send("THERE ARE NO COMMENTS AT ALL")
+        }
         if(!allCommentsOnDB)
         {
             return res.status(400).send("THERE ARE NO COMMENTS AT ALL")

@@ -1,12 +1,16 @@
 ###
 
-GET http://localhost:4000 
+GET http://localhost:4000   
+// HOME PAGE
+
 
 
 
 ###
 
 GET http://localhost:4000/Posts
+
+// GET ALL POSTS
 
 
 
@@ -18,60 +22,75 @@ POST http://localhost:4000/Posts
 Content-Type: application/json
 
 {
-    "author": "Dina ",
-    "title":"Pijama",
-    "content":"I love pijama"
+    "author": "Rotem",
+    "title":"TEST",
+    "content":"FSDFSDFSDFDS"
 }
+
+// ADD NEW POST 
 ###
 
 
-GET http://localhost:4000/Posts/6740c85d55be92f530bb268b
+GET http://localhost:4000/Posts/67433762733049812cb475bf
+
+// GET POST BY ID
 
 ###
-GET http://localhost:4000/Posts?author=YOSSI
+GET http://localhost:4000/Posts?author=Dean
 
+// GET POST BY AUTHOR WHICH IS Rotem IN THIS CASE
 
 ###
 
-PUT http://localhost:4000/Posts/673a0285731c0b261039fae7
+PUT http://localhost:4000/Posts/67433752733049812cb475bc
 Content-Type: application/json
 
 {
     "_id" : "673a0285731c0b261039fae7",
-    "content": "CONTENT UPDATED "
+    "content": "CONTENT UPDATED TEST "
 
 }
+
+// UPDATE POST BY ID
 
 ###
 POST http://localhost:4000/Comments
 Content-Type: application/json
 
 {
-    "comment_user":"pizza",
+    "comment_user":"Someone",
     "title":"pizza is the best", 
     "comment_content" : " I love pizza so much ", 
     "post_id": "6739c578bdeff3469703430f" 
 }
 
+// ADD NEW COMMENT TO POST BY ID
 ### 
 GET http://localhost:4000/Comments
 
+// GET ALL COMMENTS ON DB
+
 
 ###
-GET http://localhost:4000/Comments?post_id=6739c578bdeff3469703430f
+GET http://localhost:4000/Comments?post_id=6739c578bdeff3469703430dd
+
+// GET ALL COMMENTS BY  A SPECIFIEC POST ID
 
 ###
-PUT http://localhost:4000/Comments/673f7cba7e1d713764475d45 
+PUT http://localhost:4000/Comments/673f7cba7e1d713764475d45
 Content-Type: application/json
 
 {
     "_id" : "673f7cba7e1d713764475d45",
-    "comment_content": " new content Date: 2021-09-01 "
+    "comment_content": " new comment update for test "
 }
+// UPDATE COMMENT BY ID
 
 
 ###
 
-DELETE http://localhost:4000/Comments/6739cf496361f33ce1ff1b5d
+DELETE http://localhost:4000/Comments/6743360a6875b1f342c98f01
+
+// DELETE COMMENT BY ID
 
 
