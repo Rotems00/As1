@@ -18,7 +18,7 @@ POST http://localhost:4000/Posts
 Content-Type: application/json
 
 {
-    "author": "Dina ",
+    "author": "Dina2 ",
     "title":"Pijama",
     "content":"I love pijama"
 }
@@ -72,6 +72,6 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:4000/Comments/6739cf496361f33ce1ff1b5d
+DELETE http://localhost:4000/Comments/6740c8fd55be92f530bb2693
 
 
