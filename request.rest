@@ -22,8 +22,8 @@ POST http://localhost:4000/Posts
 Content-Type: application/json
 
 {
-    "author": "Rotem",
-    "title":"TEST",
+    "author": "Rotemfdfdsf",
+    "title":"TEST2",
     "content":"FSDFSDFSDFDS"
 }
 
@@ -31,18 +31,18 @@ Content-Type: application/json
 ###
 
 
-GET http://localhost:4000/Posts/67433762733049812cb475bf
+GET http://localhost:4000/Posts/67434205de06d55a7000db8f
 
 // GET POST BY ID
 
 ###
-GET http://localhost:4000/Posts?author=Dean
+GET http://localhost:4000/Posts?author=Rotem
 
 // GET POST BY AUTHOR WHICH IS Rotem IN THIS CASE
 
 ###
 
-PUT http://localhost:4000/Posts/67433752733049812cb475bc
+PUT http://localhost:4000/Posts/67434205de06d55a7000db8f
 Content-Type: application/json
 
 {
@@ -58,7 +58,7 @@ POST http://localhost:4000/Comments
 Content-Type: application/json
 
 {
-    "comment_user":"Someone",
+    "comment_user":"Shodfsfdfsn",
     "title":"pizza is the best", 
     "comment_content" : " I love pizza so much ", 
     "post_id": "6739c578bdeff3469703430f" 
@@ -72,12 +72,12 @@ GET http://localhost:4000/Comments
 
 
 ###
-GET http://localhost:4000/Comments?post_id=6739c578bdeff3469703430dd
+GET http://localhost:4000/Comments?post_id=6757405bfa284f94e94d830f
 
 // GET ALL COMMENTS BY  A SPECIFIEC POST ID
 
 ###
-PUT http://localhost:4000/Comments/673f7cba7e1d713764475d45
+PUT http://localhost:4000/Comments/675746aed700a5f0893f9a71
 Content-Type: application/json
 
 {
@@ -89,7 +89,7 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:4000/Comments/6743360a6875b1f342c98f01
+DELETE http://localhost:4000/Comments/6743425ede06d55a7000db9b
 
 // DELETE COMMENT BY ID
 
