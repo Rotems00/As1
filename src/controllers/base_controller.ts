@@ -14,7 +14,7 @@ export class BaseController<T> {
     try {
       const newItem = await this.model.create(req.body);
       if (!newItem) {
-        res.status(404).send("COULDNT CREATE POST! DUE TO AN ERROR");
+        res.status(404).send("COULDNT CREATE DUE TO AN ERROR");
         return;
       } else {
         res.status(201).send(newItem);
@@ -53,7 +53,7 @@ export class BaseController<T> {
       const Item = await this.model.findById(askedID);
 
       if (!Item) {
-        res.status(404).send("COULDNT FIND POST! DUE TO AN ERROR");
+        res.status(404).send("COULDNT FIND DUE TO AN ERROR");
         return;
       } else {
         res.status(200).send(Item);
