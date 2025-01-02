@@ -8,13 +8,11 @@ export class BaseController<T> {
   }
 
   async create(req: Request, res: Response) {
-    console.log("CREATE METHOD");
-    console.log(req.body);
-
+    const _id = req.query.userId; 
     try {
       const newItem = await this.model.create(req.body);
       if (!newItem) {
-        res.status(404).send("COULDNT CREATE DUE TO AN ERROR");
+        res.status(404).send("There has been Missing Data");
         return;
       } else {
         res.status(201).send(newItem);
@@ -47,8 +45,7 @@ export class BaseController<T> {
 
   async getById(req: Request, res: Response): Promise<void> {
     const askedID = req.params._id;
-    console.log("GET BY ID METHOD");
-    console.log(askedID);
+    console.log("GET BY ID");
     try {
       const Item = await this.model.findById(askedID);
 

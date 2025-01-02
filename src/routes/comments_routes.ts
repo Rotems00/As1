@@ -1,8 +1,10 @@
 import commentController from "../controllers/comments_controller";
-import express from "express";
+import express , { Request , Response } from "express";
+import {authMiddleware} from "../controllers/auth_controller";
+
 const router = express.Router();
 
-router.get("/", (req, res) => {
+router.get("/", (req : Request, res : Response) => {
   if (!req.query.postId) {
     commentController.getAll(req, res);
   } else {
@@ -10,14 +12,14 @@ router.get("/", (req, res) => {
   }
 });
 
-router.get("/:_id", (req, res) => {
+router.get("/:_id", (req : Request, res : Response) => {
   commentController.getById(req, res);
 });
-router.post("/", (req, res) => {
+router.post("/", authMiddleware, (req : Request, res : Response) => {
   commentController.create(req, res);
 });
-router.put("/:_id", commentController.updateComment.bind(commentController));
-router.delete("/:_id", (req, res) => {
+router.put("/:_id", authMiddleware ,commentController.updateComment.bind(commentController));
+router.delete("/:_id", authMiddleware , (req : Request, res : Response) => {
   commentController.deleteComment(req, res);
 });
 
