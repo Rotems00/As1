@@ -4,10 +4,17 @@ import mongoose from 'mongoose';
 import bodyParser from 'body-parser';
 import postsRoutes from './routes/posts_routes';
 import commentsRoutes from './routes/comments_routes';
+import authRoutes from './routes/auth_routes';
 
 dotenv.config();
 
 const app = express();
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use('/auth', authRoutes);
+app.use('/Posts', postsRoutes);
+app.use('/Comments', commentsRoutes);
 
 const initApplication = async (): Promise<Express> => {
     return new Promise<Express>((resolve, reject) => {
@@ -18,7 +25,7 @@ const initApplication = async (): Promise<Express> => {
         });
 
         db.once('open', () => {
-            console.log('CONNECTED TO MONGODB');
+            console.log('Connected to database');
         });
 
         if (!process.env.DATABASE_URL) {
@@ -26,31 +33,14 @@ const initApplication = async (): Promise<Express> => {
             reject();
             return;
         }
-
+        else {
         mongoose
             .connect(process.env.DATABASE_URL)
             .then(() => {
-                console.log('initApplication: Connected to MongoDB');
-
-               
-                app.use(bodyParser.json());
-                app.use(bodyParser.urlencoded({ extended: true }));
-
-               
-                app.use('/Posts', postsRoutes);
-                app.use('/Comments', commentsRoutes);
-
-                app.use(express.json());
-
-                
-                app.get('/', (req, res) => {
-                    console.log('Welcome to the homepage');
-                    res.send('Welcome to the homepage');
-                });
-
+                //app.use(express.json());
                 resolve(app);
             })
-            
+        }      
     });
 };
 

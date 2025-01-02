@@ -7,6 +7,7 @@ appInit
   .then((app) => {
     app.listen(port, () => {
       console.log(`Server is running on port ${port}`);
+      console.log("server is running");
     });
   })
   .catch((err) => {

@@ -1,10 +1,12 @@
 {
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "dotenv": "^16.4.5",
-    "express": "^4.21.1",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.11.0",
-    "mongoose": "^8.8.3",
+    "mongoose": "^8.8.4",
     "node": "^18.20.5",
     "rest": "^2.0.0"
   },
@@ -13,8 +15,11 @@
   "description": "\"Rotems and Shons app\"",
   "main": "index.js",
   "scripts": {
-    "test": " tsc && jest --detectOpenHandles --forceExit --coverage",
-    "start": " tsc && node ./dist/app.js",
+    "start": "tsc && node ./dist/src/app.js",
+    "testPost": " tsc && jest --detectOpenHandles --forceExit posts.test.ts  --coverage" ,
+    "testAuth": "tsc && jest --detectOpenHandles --forceExit auth.test.ts --coverage",
+    "testComment": "tsc && jest --detectOpenHandles --forceExit comments.test.ts --coverage",
+    "test": " tsc && jest --detectOpenHandles --forceExit --runInBand",
     "devstart": "nodemon ./src/app.ts",
     "lint": "eslint . --ext .ts"
   },
@@ -30,9 +35,11 @@
   "homepage": "https://github.com/Rotems00/As1#readme",
   "devDependencies": {
     "@eslint/js": "^9.16.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/body-parser": "^1.19.5",
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
+    "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.9.0",
     "@types/supertest": "^6.0.2",
     "eslint": "^9.16.0",

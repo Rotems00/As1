@@ -14,9 +14,7 @@ class CommentController extends BaseController<IComment> {
     try {
       const findAllComments = await commentsModel.find({ postId: postID });
       if (findAllComments.length === 0) {
-        res
-          .status(400)
-          .send("COULD NOT FIND COMMENTS DUE TO AN ERROR IN MONGO");
+        res.status(400).send("There are not comments on this post");
         return;
       } else {
         res.status(200).send(findAllComments);
@@ -51,15 +49,12 @@ class CommentController extends BaseController<IComment> {
 
   async deleteComment(req: Request, res: Response) {
     const commentID = req.params._id;
-    console.log("DELETE METHOD");
-    console.log(commentID);
-
     try {
       const theComment = await commentsModel.findByIdAndDelete({
         _id: commentID,
       });
       if (!theComment) {
-        res.status(404).send("COULD NOT DELETE THE COMMENT DUE TO AN ERROR!");
+        res.status(404).send("Could not delete comment due to an error");
         return;
       } else {
         res.status(200).send(theComment);
@@ -70,6 +65,23 @@ class CommentController extends BaseController<IComment> {
       return;
     }
   }
+  /*
+  async create(req: Request, res: Response) {
+      const userId = req.query.userId;
+      console.log("*******************"+req.body);
+      const comment = {
+        owner : userId,
+        postId : req.body.postId,
+        comment : req.body.comment
+      }
+      if(comment.owner === undefined || comment.postId === undefined || comment.comment === undefined){
+        res.status(400).send("Missing Data");
+        return;
+      }
+      req.body = comment
+      return super.create(req, res);
+    }
+      */
 }
 
 export default new CommentController();

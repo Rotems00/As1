@@ -1,25 +1,47 @@
 import request from "supertest";
 import appInit from "../server";
 import mongoose from "mongoose";
-import postModel from "../modules/posts_model";
+import postsModel from "../modules/posts_model";
 import { Express } from "express";
+import userModel from "../modules/auth_model";
+import { title } from "process";
 
 let app: Express;
-const testPost = {
-  title: "Test Post",
-  content: "Test Content",
-  owner: "Test Owner",
-};
-let postID = "";
+
+
 
 beforeAll(async () => {
   app = await appInit.initApplication();
-  await postModel.deleteMany();
+  await postsModel.deleteMany();
+  await userModel.deleteMany();
+  await request(app).post("/auth/register").send(userInfo);
+  const response = await request(app).post("/auth/login").send(userInfo);
+  userInfo._id = response.body._id;
+  userInfo.accessToken = response.body.accessToken;
+  userInfo.refreshToken = response.body.refreshToken;
+
 });
 
 afterAll(() => {
   mongoose.connection.close();
 });
+
+type UserInfo = {
+  email: string;
+  password: string;
+  _id?: string;
+  accessToken?: string;
+  refreshToken?: string;
+};
+
+const userInfo: UserInfo = {
+  email: "ShonHason@gmail.com",
+  password: "123456",
+};
+const testPost = {
+  title: "Test Post",
+  content: "Test Content",};
+let postID = "";
 
 describe("Posts tests", () => {
   test("Test 1 - GET ALL POSTS-EMPTY", async () => {
@@ -29,11 +51,22 @@ describe("Posts tests", () => {
   });
 
   test("Test 2 - CREATE A POST", async () => {
-    const response = await request(app).post("/Posts").send(testPost);
+    console.log("**********Test2*********");
+   const response = await request(app)
+         .post("/Posts")
+         .set({
+           Authorization: "jwt " + userInfo.accessToken,
+         })
+         .send({
+           content: "Test 2 Content",
+           title: "Test 2 Title",
+           owner: userInfo._id,
+         });
+
+    console.log(response.body);
     expect(response.status).toBe(201);
-    expect(response.body.owner).toBe(testPost.owner);
-    expect(response.body.title).toBe(testPost.title);
-    expect(response.body.content).toBe(testPost.content);
+    expect(response.body.title).toBe("Test 2 Title"); 
+    expect(response.body.content).toBe("Test 2 Content");
     postID = response.body._id;
   });
 
@@ -49,7 +82,7 @@ describe("Posts tests", () => {
   });
 
   test("Test 5 - GET A POST BY POST OWNER", async () => {
-    const response = await request(app).get(`/Posts/?owner=${testPost.owner}`);
+    const response = await request(app).get("/Posts/?owner="+userInfo._id);
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(1);
   });
@@ -63,11 +96,14 @@ describe("Posts tests", () => {
     expect(response.body.content).toBe("New Content");
   });
 
-  test("Test 7 - FAILURE TO CREATE A POST", async () => {
-    const response = await request(app)
-      .post("/Posts")
-      .send({ author: "Test Author" });
-    expect(response.status).toBe(400);
+  test("Test 7 -  FAILURE CREATE A POST", async () => {
+    const response =  await request(app).post("/Posts").set({
+      Authorization: "jwt " + userInfo.accessToken,
+    }).send({ title: "Test Post"});
+
+    console.log(response.body);
+    expect(response.status).toBe(400);  
+    expect(response.text).toBe("Missing Data");
   });
 
   test("Test 8 - FAILURE TO GET A POST BY ID", async () => {
