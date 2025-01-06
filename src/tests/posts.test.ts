@@ -4,11 +4,8 @@ import mongoose from "mongoose";
 import postsModel from "../modules/posts_model";
 import { Express } from "express";
 import userModel from "../modules/auth_model";
-import { title } from "process";
 
 let app: Express;
-
-
 
 beforeAll(async () => {
   app = await appInit.initApplication();
@@ -19,7 +16,6 @@ beforeAll(async () => {
   userInfo._id = response.body._id;
   userInfo.accessToken = response.body.accessToken;
   userInfo.refreshToken = response.body.refreshToken;
-
 });
 
 afterAll(() => {
@@ -38,9 +34,7 @@ const userInfo: UserInfo = {
   email: "ShonHason@gmail.com",
   password: "123456",
 };
-const testPost = {
-  title: "Test Post",
-  content: "Test Content",};
+
 let postID = "";
 
 describe("Posts tests", () => {
@@ -52,20 +46,20 @@ describe("Posts tests", () => {
 
   test("Test 2 - CREATE A POST", async () => {
     console.log("**********Test2*********");
-   const response = await request(app)
-         .post("/Posts")
-         .set({
-           Authorization: "jwt " + userInfo.accessToken,
-         })
-         .send({
-           content: "Test 2 Content",
-           title: "Test 2 Title",
-           owner: userInfo._id,
-         });
+    const response = await request(app)
+      .post("/Posts")
+      .set({
+        Authorization: "jwt " + userInfo.accessToken,
+      })
+      .send({
+        content: "Test 2 Content",
+        title: "Test 2 Title",
+        owner: userInfo._id,
+      });
 
     console.log(response.body);
     expect(response.status).toBe(201);
-    expect(response.body.title).toBe("Test 2 Title"); 
+    expect(response.body.title).toBe("Test 2 Title");
     expect(response.body.content).toBe("Test 2 Content");
     postID = response.body._id;
   });
@@ -82,7 +76,7 @@ describe("Posts tests", () => {
   });
 
   test("Test 5 - GET A POST BY POST OWNER", async () => {
-    const response = await request(app).get("/Posts/?owner="+userInfo._id);
+    const response = await request(app).get("/Posts/?owner=" + userInfo._id);
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(1);
   });
@@ -97,12 +91,15 @@ describe("Posts tests", () => {
   });
 
   test("Test 7 -  FAILURE CREATE A POST", async () => {
-    const response =  await request(app).post("/Posts").set({
-      Authorization: "jwt " + userInfo.accessToken,
-    }).send({ title: "Test Post"});
+    const response = await request(app)
+      .post("/Posts")
+      .set({
+        Authorization: "jwt " + userInfo.accessToken,
+      })
+      .send({ title: "Test Post" });
 
     console.log(response.body);
-    expect(response.status).toBe(400);  
+    expect(response.status).toBe(400);
     expect(response.text).toBe("Missing Data");
   });
 
