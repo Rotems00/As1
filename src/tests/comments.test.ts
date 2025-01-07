@@ -4,7 +4,6 @@ import mongoose from "mongoose";
 import commentModel from "../modules/comments_model";
 import { Express } from "express";
 import userModel from "../modules/auth_model";
-import { Console } from "console";
 import postsModel from "../modules/posts_model";
 let app: Express;
 
@@ -14,7 +13,6 @@ const testComment = {
   postId: "",
 };
 let commentID = "";
-let postID = "";
 type UserInfo = {
   email: string;
   password: string;
@@ -38,7 +36,10 @@ beforeAll(async () => {
   userInfo._id = response.body._id;
   userInfo.accessToken = response.body.accessToken;
   userInfo.refreshToken = response.body.refreshToken;
-  await request(app).post("/Posts").set({ Authorization: "jwt " + userInfo.accessToken }).send({ title: "Test Post", content: "Test Content", });
+  await request(app)
+    .post("/Posts")
+    .set({ Authorization: "jwt " + userInfo.accessToken })
+    .send({ title: "Test Post", content: "Test Content" });
   testComment.postId = response.body._id;
   console.log("*****************" + userInfo);
 });
@@ -54,9 +55,12 @@ describe("comments tests", () => {
     expect(response.body).toHaveLength(0);
   });
   test("Test 2 - CREATE A COMMENT", async () => {
-    const response = await request(app).post("/Comments").set({
-      Authorization: "jwt " + userInfo.accessToken,
-    }).send(testComment);
+    const response = await request(app)
+      .post("/Comments")
+      .set({
+        Authorization: "jwt " + userInfo.accessToken,
+      })
+      .send(testComment);
     console.log("*************************" + response.body);
     console.log(testComment);
     expect(response.status).toBe(201);
@@ -64,9 +68,16 @@ describe("comments tests", () => {
     expect(response.body.comment).toBe(testComment.comment);
     expect(response.body.postId).toBe(testComment.postId);
     commentID = response.body._id;
-    const response2 = await request(app).post("/Comments").set({
-      Authorization: "jwt " + userInfo.accessToken,
-    }).send({ owner: "Test 2 Owner", comment: "comment 2 Content", postId: testComment.postId });
+    const response2 = await request(app)
+      .post("/Comments")
+      .set({
+        Authorization: "jwt " + userInfo.accessToken,
+      })
+      .send({
+        owner: "Test 2 Owner",
+        comment: "comment 2 Content",
+        postId: testComment.postId,
+      });
   });
   test("Test 3- GET ALL COMMENTS-FULL", async () => {
     const response = await request(app).get("/Comments");
@@ -74,11 +85,12 @@ describe("comments tests", () => {
     expect(response.body).toHaveLength(2);
   });
   test("GET /comments on specific postId", async () => {
-    const response = await request(app).get("/Comments").query({ postId: testComment.postId });
+    const response = await request(app)
+      .get("/Comments")
+      .query({ postId: testComment.postId });
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(2);
     console.log(response.body);
-
   });
   test("Test 4 - GET A COMMENT BY ID", async () => {
     const response = await request(app).get(`/Comments/${commentID}`);
@@ -94,7 +106,9 @@ describe("comments tests", () => {
   });
 
   test("Test 6 - CHANGE A COMMENT", async () => {
-    const response = await request(app).put(`/Comments/${commentID}`).set("Authorization", "jwt " + userInfo.accessToken)
+    const response = await request(app)
+      .put(`/Comments/${commentID}`)
+      .set("Authorization", "jwt " + userInfo.accessToken)
       .send({ comment: "Pizza is the best" });
     expect(response.status).toBe(200);
     expect(response.body.comment).toBe("Pizza is the best");
@@ -126,7 +140,9 @@ describe("comments tests", () => {
     expect(response.status).not.toBe(200);
   });
   test("Test 11 - FAILURE TO DELETE A COMMENT", async () => {
-    const response = await request(app).delete(`/Comments/12345`).set("Authorization", "jwt " + userInfo.accessToken);
+    const response = await request(app)
+      .delete(`/Comments/12345`)
+      .set("Authorization", "jwt " + userInfo.accessToken);
     expect(response.status).not.toBe(200);
   });
 
@@ -134,5 +150,4 @@ describe("comments tests", () => {
     const response = await request(app).put(`/Comments/12345`);
     expect(response.status).not.toBe(200);
   });
-
 });

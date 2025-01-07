@@ -8,7 +8,6 @@ export class BaseController<T> {
   }
 
   async create(req: Request, res: Response) {
-    const _id = req.query.userId; 
     try {
       const newItem = await this.model.create(req.body);
       if (!newItem) {
@@ -30,6 +29,10 @@ export class BaseController<T> {
     try {
       if (ownerFilter) {
         const Items = await this.model.find({ owner: ownerFilter });
+        if (Items.length === 0) {
+          res.status(404).send("There are no items with this owner");
+          return;
+        }
         res.status(200).send(Items);
         return;
       } else {
