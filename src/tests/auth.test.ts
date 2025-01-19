@@ -374,4 +374,12 @@ describe("Auth tests", () => {
     // Restore the mocked method
     mockFindById.mockRestore();
   });
+
+  // i need a test for this :   res.status(400).send("Email and Password are required");
+  test("Test 17 - Auth register - missing email or password", async () => {
+    const response = await request(app).post("/auth/register").send({
+      password: "123456", //
+    });
+    expect(response.status).toBe(400);
+  });
 });

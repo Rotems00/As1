@@ -1,9 +1,10 @@
 import postsModel, { IPost } from "../modules/posts_model";
 import { Request, Response } from "express";
 import { BaseController } from "./base_controller";
-import { title } from "process";
+
 
 class PostController extends BaseController<IPost> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   constructor(model : any) {
     //super(postsModel);
     super(model);
