@@ -84,8 +84,10 @@ describe("Posts tests", () => {
   test("Test 6 - CHANGE A POST", async () => {
     const response = await request(app)
       .put("/Posts/" + postID)
+      .set({
+        Authorization: "jwt " + userInfo.accessToken,
+      })
       .send({ content: "New Content" });
-
     expect(response.status).toBe(200);
     expect(response.body.content).toBe("New Content");
   });
@@ -117,6 +119,21 @@ describe("Posts tests", () => {
     const owner = "NonExistingOwner";
     const response = await request(app).get(`/Posts/?author=${owner}`);
     expect(response.status).toBe(200);
+  });
+
+  test("Test 11 - FAIULRE TO UPDATE A POST - RECIEVE ERROR", async () => {
+    const mockerror = jest
+      .spyOn(postsModel, "findByIdAndUpdate")
+      .mockRejectedValue(new Error("Database connection error"));
+
+    const response = await request(app)
+      .put("/Posts/" + postID)
+      .set({
+        Authorization: "jwt " + userInfo.accessToken,
+      })
+      .send({ content: "New Content" });
+
+    expect(response.status).toBe(400);
   });
 });
 
