@@ -41,7 +41,6 @@ beforeAll(async () => {
     .set({ Authorization: "jwt " + userInfo.accessToken })
     .send({ title: "Test Post", content: "Test Content" });
   testComment.postId = response.body._id;
-  console.log("*****************" + userInfo);
 });
 
 afterAll(() => {
@@ -61,8 +60,6 @@ describe("comments tests", () => {
         Authorization: "jwt " + userInfo.accessToken,
       })
       .send(testComment);
-    console.log("*************************" + response.body);
-    console.log(testComment);
     expect(response.status).toBe(201);
     expect(response.body.owner).toBe(testComment.owner);
     expect(response.body.comment).toBe(testComment.comment);
@@ -90,7 +87,6 @@ describe("comments tests", () => {
       .query({ postId: testComment.postId });
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(2);
-    console.log(response.body);
   });
   test("Test 4 - GET A COMMENT BY ID", async () => {
     const response = await request(app).get(`/Comments/${commentID}`);
@@ -124,14 +120,11 @@ describe("comments tests", () => {
   });
 
   test("Test 8 - FAILURE TO CREATE A COMMENT", async () => {
-    console.log("test 8*************************************");
     const response = await request(app)
       .post("/Comments")
       .set("Authorization", "jwt " + userInfo.accessToken)
       .send({});
     expect(response.status).toBe(400);
-    console.log("***********test8**********");
-    console.log(response.body);
   });
   test("Test 9 - FAILURE TO GET A COMMENT BY ID", async () => {
     const response = await request(app).get(`/Comments/12345`);

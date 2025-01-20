@@ -1,4 +1,4 @@
-import authController from "../controllers/auth_controller";
+import authController, { authMiddleware } from "../controllers/auth_controller";
 import express from "express";
 const router = express.Router();
 /**
@@ -163,6 +163,8 @@ router.post("/logout", authController.logout);
  *   post:
  *     summary: Logout a user
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
@@ -188,7 +190,13 @@ router.post("/logout", authController.logout);
  *             schema:
  *               type: string
  *               example: "Missing Refresh Token"
- *
+ *       403:
+ *         description: Invalid refresh token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "Invalid Refresh Token"
  *       404:
  *         description: User not found
  *         content:
@@ -211,6 +219,8 @@ router.post("/refresh", authController.refresh);
  *   post:
  *     summary: Refresh access token
  *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
  *     requestBody:
  *       required: true
  *       content:
