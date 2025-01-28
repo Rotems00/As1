@@ -4,9 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
 const register = async (req: Request, res: Response) => {
-  const email = req.body.email;
-  const password = req.body.password;
-
+  const { username, email, password } = req.body;
   if (
     !email ||
     !password ||
@@ -25,6 +23,7 @@ const register = async (req: Request, res: Response) => {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     const newUser = await userModel.create({
+      username: username,
       email: email,
       password: hashedPassword,
     });
@@ -60,26 +59,27 @@ const generateTokens = (
 };
 
 const login = async (req: Request, res: Response) => {
-  const email = req.body.email;
-  const password = req.body.password;
+  const { usernameOrEmail, password } = req.body;
+
   if (
-    !email ||
+    !usernameOrEmail ||
     !password ||
-    email.trim().length === 0 ||
+    usernameOrEmail.trim().length === 0 ||
     password.trim().length === 0
   ) {
     res.status(400).send("Email and Password are required");
     return;
   }
   try {
-    const user = await userModel.findOne({ email: email });
+    const user = await userModel.findOne({ $or: [{ email: usernameOrEmail }, { username: usernameOrEmail }] });
     if (!user) {
-      res.status(400).send("Check your email or password");
+
+      res.status(400).send("invalid email/username or password");
       return;
     }
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      res.status(400).send("Check your email or password");
+      res.status(400).send("invalid email/username or password");
       return;
     }
     const tokens = generateTokens(user._id.toString());
@@ -126,7 +126,7 @@ const logout = async (req: Request, res: Response) => {
   jwt.verify(
     refreshToken,
     process.env.TOKEN_SECRET,
-    async (err: any, data: any) => {
+    async (err: any , data: any) => {
       if (err) {
         res.status(403).send("Invalid Refresh Token");
         return;

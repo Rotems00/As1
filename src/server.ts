@@ -7,17 +7,25 @@ import commentsRoutes from "./routes/comments_routes";
 import authRoutes from "./routes/auth_routes";
 import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
-
 dotenv.config();
 
 const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+// Middleware to set CORS headers
+app.use((req , res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', '*');
+  res.header('Access-Control-Allow-Headers', '*'); 
+  next(); 
+});
+
 app.use("/auth", authRoutes);
 app.use("/Posts", postsRoutes);
 app.use("/Comments", commentsRoutes);
 
+// Swagger setup
 const options = {
   definition: {
     openapi: "3.0.0",
@@ -51,7 +59,6 @@ const initApplication = async (): Promise<Express> => {
       return;
     } else {
       mongoose.connect(process.env.DATABASE_URL).then(() => {
-        //app.use(express.json());
         resolve(app);
       });
     }

@@ -75,6 +75,7 @@ describe("comments tests", () => {
         comment: "comment 2 Content",
         postId: testComment.postId,
       });
+    expect(response2.status).toBe(201);
   });
   test("Test 3- GET ALL COMMENTS-FULL", async () => {
     const response = await request(app).get("/Comments");
