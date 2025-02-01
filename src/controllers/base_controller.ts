@@ -7,6 +7,7 @@ export class BaseController<T> {
     this.model = model;
   }
 
+  
   async create(req: Request, res: Response) {
     try {
       const newItem = await this.model.create(req.body);

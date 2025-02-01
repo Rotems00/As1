@@ -246,4 +246,9 @@ router.put(
  *               example: "Internal Server Error"
  */
 
+router.post("/create", (req, res) => PostController.createPost(req, res));
+router.delete("/delete/:_id", (req, res) => PostController.deletePost(req, res));
+router.put("/like/:_id", (req, res) => PostController.addLike(req, res));
+router.put("/unlike/:_id", (req, res) => PostController.unLike(req, res));
+router.put("/update/:_id", (req, res) => PostController.updatePost(req, res));
 export default router;

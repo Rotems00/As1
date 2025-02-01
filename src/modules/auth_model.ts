@@ -19,12 +19,18 @@ const userSchema = new mongoose.Schema({
   },  
   password: {
     type: String,
-    required: true,
+    default: "",
   },
   refreshTokens: {
     type: [String],
     default: [],
   },
+  imagePath: {
+    type: String,
+    required: false,
+    default: "",
+  },
+  
 });
 
 const userModel = mongoose.model("Users", userSchema);

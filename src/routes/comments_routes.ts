@@ -72,6 +72,7 @@ router.get("/", (req: Request, res: Response) => {
  *               example: "Internal Server Error"
  */
 
+
 router.get("/:_id", (req: Request, res: Response) => {
   commentController.getById(req, res);
 });
@@ -134,6 +135,7 @@ router.get("/:_id", (req: Request, res: Response) => {
 router.post("/", authMiddleware, (req: Request, res: Response) => {
   commentController.create(req, res);
 });
+
 /**
  * @swagger
  * /comments:
@@ -321,5 +323,9 @@ router.delete("/:_id", authMiddleware, (req: Request, res: Response) => {
  *               type: string
  *               example: "Internal Server Error"
  */
+
+router.get("/getCommentsByPostId/:postId", (req: Request, res: Response) => {
+  commentController.readAllCommentsOnSpecifiecPost(req, res);
+});
 
 export default router;

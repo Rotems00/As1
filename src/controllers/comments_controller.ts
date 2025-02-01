@@ -8,8 +8,8 @@ class CommentController extends BaseController<IComment> {
   }
 
   async readAllCommentsOnSpecifiecPost(req: Request, res: Response) {
-    const postID = req.query.postId;
-    console.log("GET ALL COMMENTS ON SPECIFIC POST METHOD");
+    const postID = req.params.postId;
+    console.log("Method : Read All Comments on a specific post");
     console.log(postID);
     try {
       const findAllComments = await commentsModel.find({ postId: postID });
