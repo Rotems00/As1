@@ -2,6 +2,63 @@ import { Request, Response, NextFunction } from "express";
 import userModel from "../modules/auth_model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import { OAuth2Client } from "google-auth-library";
+import dotenv from "dotenv";
+dotenv.config();
+
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
+const client = new OAuth2Client(GOOGLE_CLIENT_ID); // Replace with your actual Google Client ID
+
+
+const googleConnection = async (req: Request, res: Response) => {
+  const { token } = req.body;
+  try {
+    const ticket = await client.verifyIdToken({
+      idToken: token,
+      audience: process.env.GOOGLE_CLIENT_ID!,
+    });
+
+    const payload = ticket.getPayload();
+    if (!payload) {
+      res.status(400).json({ error: 'Invalid token' });
+      return
+    }
+
+    const { email } = payload;
+
+    let user = await userModel.findOne({ email });
+    
+    if (!user) {
+      user = new userModel({
+        email,
+       
+      });
+      await user.save();
+    }
+    const tokens = generateTokens(user._id.toString());
+    if (!tokens) {
+      res.status(500).json({ error: 'Failed to generate tokens' });
+      return;
+    }
+    const { accessToken, refreshToken } = tokens;
+    // Generate JWT token
+    user.refreshTokens.push(refreshToken);
+    await user.save();
+    res.status(200).send({
+      email: user.email,
+      _id: user._id,
+      accessToken: accessToken,
+      refreshToken: refreshToken,
+    });
+    return;
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to authenticate with Google' });
+    return ;
+  }
+};
+
 
 const register = async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
@@ -35,9 +92,7 @@ const register = async (req: Request, res: Response) => {
   }
 };
 
-const generateTokens = (
-  _id: string
-): { accessToken: string; refreshToken: string } | null => {
+const generateTokens = (_id: string): { accessToken: string; refreshToken: string } | null => {
   const rand = Math.floor(Math.random() * 10000000);
   const rand2 = Math.floor(Math.random() * 10000000);
   if (!process.env.TOKEN_SECRET) {
@@ -113,7 +168,6 @@ type TokenPayload = {
 
 const logout = async (req: Request, res: Response) => {
   const refreshToken = req.body.refreshToken;
-  const id = req.query.userId;
   if (!refreshToken) {
     res.status(400).send("Missing Refresh Token");
     return;
@@ -254,4 +308,4 @@ export const authMiddleware = (
   }
 };
 
-export default { register, login, logout, refresh };
+export default { register, login, logout, refresh , googleConnection};

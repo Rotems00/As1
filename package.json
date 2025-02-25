@@ -1,12 +1,15 @@
 {
   "dependencies": {
+    "axios": "^1.7.9",
     "bcrypt": "^5.1.1",
     "body-parser": "^1.20.3",
     "dotenv": "^16.4.5",
     "express": "^4.21.2",
+    "google-auth-library": "^9.15.1",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.11.0",
     "mongoose": "^8.8.4",
+    "multer": "^1.4.5-lts.1",
     "node": "^18.20.5",
     "rest": "^2.0.0"
   },
@@ -18,7 +21,9 @@
     "start": "tsc && node ./dist/src/app.js",
     "testPost": " tsc && jest --detectOpenHandles --forceExit posts.test.ts  --coverage",
     "testAuth": "tsc && jest --detectOpenHandles --forceExit auth.test.ts --coverage",
+    "testFile": "tsc && jest --detectOpenHandles --forceExit file.test.ts ",
     "testComment": "tsc && jest --detectOpenHandles --forceExit comments.test.ts --coverage",
+
     "test": " tsc && jest --detectOpenHandles --forceExit --runInBand",
     "devstart": "nodemon ./src/app.ts",
     "lint": "eslint . --ext .ts"
@@ -40,6 +45,7 @@
     "@types/express": "^5.0.0",
     "@types/jest": "^29.5.14",
     "@types/jsonwebtoken": "^9.0.7",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.9.0",
     "@types/supertest": "^6.0.2",
     "@types/swagger-jsdoc": "^6.0.4",

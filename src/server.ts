@@ -1,16 +1,20 @@
 import express, { Express } from "express";
-import dotenv from "dotenv";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 import postsRoutes from "./routes/posts_routes";
 import commentsRoutes from "./routes/comments_routes";
+import fileRoutes from "./routes/file_routes";  
 import authRoutes from "./routes/auth_routes";
 import swaggerUI from "swagger-ui-express";
 import swaggerJsDoc from "swagger-jsdoc";
+import dotenv from "dotenv";
+import path from 'path';
+
+
 dotenv.config();
 
 const app = express();
-
+app.use("/media", express.static("public"));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 // Middleware to set CORS headers
@@ -24,6 +28,10 @@ app.use((req , res, next) => {
 app.use("/auth", authRoutes);
 app.use("/Posts", postsRoutes);
 app.use("/Comments", commentsRoutes);
+app.use("/file", fileRoutes)
+app.use("/public",express.static("public"));
+app.use('/storage', express.static('storage'));
+
 
 // Swagger setup
 const options = {
