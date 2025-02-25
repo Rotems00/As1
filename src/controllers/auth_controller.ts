@@ -84,12 +84,10 @@ const register = async (req: Request, res: Response) => {
       email: email,
       password: hashedPassword,
     });
-    console.log("made it here");
     res.status(201).send(newUser);
     return;
   } catch (err) {
-    console.log(err);
-    res.status(400);
+    res.status(400).send(err);
     return;
   }
 };
