@@ -35,7 +35,7 @@ const router = express.Router();
  */
 
 router.post("/", authMiddleware, (req: Request, res: Response) => {
-  PostController.create(req, res);
+  PostController.createPost(req, res);
 });
 /**
  * @swagger

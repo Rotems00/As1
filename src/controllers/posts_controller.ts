@@ -19,6 +19,8 @@ async createPost(req: Request, res: Response) {
       rank : req.body.rank,
       imageUrl : req.body.imageUrl,
     };
+ 
+
     if (!post.owner || !post.content || !post.title) {
       res.status(400).send("Missing Data");
       return;

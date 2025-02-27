@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
 import dotenv from "dotenv";
+import { get } from "http";
 dotenv.config();
 
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || "";
@@ -307,5 +308,23 @@ export const authMiddleware = (
     });
   }
 };
-
-export default { register, login, logout, refresh , googleConnection};
+const getUser = async (req: Request, res: Response) => {
+  const userId = req.query.userId;
+  if (!userId) {
+    res.status(400).send("Missing Data");
+    return;
+  }
+  try {
+    const user = await userModel.findById(userId);
+    if (!user) {
+      res.status(404).send("Couldnt find user");
+      return;
+    } else {
+      res.status(200).send(user);
+      return;
+    }
+  } catch {
+    res.status(400).send("problem find user request");
+  }
+}
+export default { register, login, logout, refresh , googleConnection, getUser};
