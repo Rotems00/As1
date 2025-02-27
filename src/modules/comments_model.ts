@@ -15,10 +15,12 @@ const comments_Schema = new mongoose.Schema<IComment>({
     type: String,
     required: true,
   },
-  owner: {
-    type: String,
-    required: true,
-  },
+    owner: {
+      type: String,
+      required: true,
+    }
+  }, {
+    timestamps: true,
 });
 
 const commentsModel = mongoose.model<IComment>("Comments", comments_Schema);

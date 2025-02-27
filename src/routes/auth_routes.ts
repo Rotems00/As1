@@ -265,5 +265,5 @@ router.post("/refresh", authController.refresh);
  *               example: "Missing Token Secret"
  */
 router.post('/google-signin', authController.googleConnection);
-
+router.post('/myuser', authController.getUser);
 export default router;
