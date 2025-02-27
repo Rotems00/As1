@@ -41,7 +41,6 @@ beforeAll(async () => {
     .set({ Authorization: "jwt " + userInfo.accessToken })
     .send({ title: "Test Post", content: "Test Content" });
   testComment.postId = response.body._id;
-  console.log("*****************" + userInfo);
 });
 
 afterAll(() => {
@@ -61,8 +60,6 @@ describe("comments tests", () => {
         Authorization: "jwt " + userInfo.accessToken,
       })
       .send(testComment);
-    console.log("*************************" + response.body);
-    console.log(testComment);
     expect(response.status).toBe(201);
     expect(response.body.owner).toBe(testComment.owner);
     expect(response.body.comment).toBe(testComment.comment);
@@ -91,7 +88,6 @@ describe("comments tests", () => {
       .query({ postId: testComment.postId });
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(2);
-    console.log(response.body);
   });
   test("Test 4 - GET A COMMENT BY ID", async () => {
     const response = await request(app).get(`/Comments/${commentID}`);
@@ -111,7 +107,9 @@ describe("comments tests", () => {
       .put(`/Comments/${commentID}`)
       .set("Authorization", "jwt " + userInfo.accessToken)
       .send({ comment: "Pizza is the best" });
+
     expect(response.status).toBe(200);
+
     expect(response.body.comment).toBe("Pizza is the best");
   });
 
@@ -123,14 +121,11 @@ describe("comments tests", () => {
   });
 
   test("Test 8 - FAILURE TO CREATE A COMMENT", async () => {
-    console.log("test 8*************************************");
     const response = await request(app)
       .post("/Comments")
       .set("Authorization", "jwt " + userInfo.accessToken)
       .send({});
     expect(response.status).toBe(400);
-    console.log("***********test8**********");
-    console.log(response.body);
   });
   test("Test 9 - FAILURE TO GET A COMMENT BY ID", async () => {
     const response = await request(app).get(`/Comments/12345`);
@@ -150,5 +145,67 @@ describe("comments tests", () => {
   test("Test 12 - FAILURE TO UPDATE A COMMENT", async () => {
     const response = await request(app).put(`/Comments/12345`);
     expect(response.status).not.toBe(200);
+  });
+
+  test("Test 13- FAIULRE TO CREATE A COMMENT", async () => {
+    const mockcreate = jest.spyOn(commentModel, "create").mockResolvedValue([]);
+    const response = await request(app)
+      .put(`/Comments/12345`)
+      .set("Authorization", "jwt " + userInfo.accessToken)
+      .send({});
+
+    expect(response.status).toBe(400);
+
+    // Restore the mocked method
+    mockcreate.mockRestore();
+  });
+
+  test("Test 14 - FAILURE WHEN NO ITEMS FOUND WITH OWNER FILTER", async () => {
+    const response = await request(app).get("/Comments/?owner=SOMEOWNERID");
+
+    expect(response.status).toBe(404);
+    expect(response.text).toBe("There are no items with this owner");
+  });
+
+  test("Test 18 - SUCCESS WHEN COMMENTS FOUND FOR OWNER FILTER", async () => {
+    const mockFind = jest.spyOn(commentModel, "find").mockResolvedValueOnce([
+      {
+        _id: "123",
+        owner: "SOMEOWNERID",
+        content: "This is a comment from owner 1",
+      },
+      {
+        _id: "124",
+        owner: "SOMEOWNERID",
+        content: "This is another comment from owner 1",
+      },
+    ]);
+
+    const response = await request(app).get("/Comments/?owner=SOMEOWNERID");
+
+    // Check if the response is successful (200 OK) and contains the mocked comments
+    expect(response.status).toBe(200);
+    expect(response.body).toEqual([
+      {
+        _id: "123",
+        owner: "SOMEOWNERID",
+        content: "This is a comment from owner 1",
+      },
+      {
+        _id: "124",
+        owner: "SOMEOWNERID",
+        content: "This is another comment from owner 1",
+      },
+    ]);
+  });
+
+  test("Test 19 - FAILURE WHEN DB ERROR OCCURS", async () => {
+    const mockFind = jest
+      .spyOn(commentModel, "find")
+      .mockRejectedValue(new Error("Database connection error"));
+
+    const response = await request(app).get("/Comments");
+
+    expect(response.status).toBe(400);
   });
 });

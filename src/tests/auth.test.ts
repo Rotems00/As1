@@ -34,13 +34,9 @@ const userInfo: UserInfo = {
 describe("Auth tests", () => {
   test("Test 1 - Auth Registration / Double registration", async () => {
     const response = await request(app).post("/auth/register").send(userInfo);
-    console.log(response.body);
-
     expect(response.status).toBe(201);
-
     // Double registration should fail
     const response2 = await request(app).post("/auth/register").send(userInfo);
-    console.log(response2.body);
     expect(response2.status).toBe(400);
   });
 
@@ -63,8 +59,6 @@ describe("Auth tests", () => {
     userInfo._id = userId;
     userInfo.accessToken = accessToken;
     userInfo.refreshToken = refreshToken;
-
-    console.log(userInfo);
   });
   test("Test 2 - Auth register - missing email or password", async () => {
     const response = await request(app).post("/auth/register").send({
@@ -97,9 +91,6 @@ describe("Auth tests", () => {
       email: userInfo.email,
       password: userInfo.password,
     });
-    console.log("new token : " + response.body.accessToken);
-    console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-    console.log("old token : " + userInfo.accessToken);
     expect(response.body.accessToken).not.toEqual(userInfo.accessToken);
   });
 
@@ -124,10 +115,6 @@ describe("Auth tests", () => {
         title: "Test Title",
         owner: userInfo._id,
       });
-    console.log(
-      "*****************************************************************"
-    );
-    console.log(response2.body);
     expect(response2.status).toBe(201);
   });
 
@@ -149,7 +136,6 @@ describe("Auth tests", () => {
     const response = await request(app).post("/auth/refresh").send({
       refreshToken: userInfo.refreshToken,
     });
-    console.log(response.body);
     expect(response.status).toBe(200);
     expect(response.body.accessToken).toBeDefined();
     expect(response.body.refreshToken).toBeDefined();
@@ -172,7 +158,6 @@ describe("Auth tests", () => {
     const response2 = await request(app).post("/auth/refresh").send({
       refreshToken: userInfo.refreshToken,
     });
-    console.log(response2.body);
     expect(response2.status).not.toBe(200);
   });
   test("Test 7 - refresh token multi usage", async () => {
@@ -222,7 +207,6 @@ describe("Auth tests", () => {
         content: " invalid Test Content",
       });
     expect(response2.status).not.toBe(200);
-    console.log(response2.statusCode);
   });
   test("Test 9 - Logout not valid refresh token", async () => {
     const response = await request(app)
@@ -373,5 +357,12 @@ describe("Auth tests", () => {
 
     // Restore the mocked method
     mockFindById.mockRestore();
+  });
+
+  test("Test 17 - Auth register - missing email or password", async () => {
+    const response = await request(app).post("/auth/register").send({
+      password: "123456", //
+    });
+    expect(response.status).toBe(400);
   });
 });

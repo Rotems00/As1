@@ -9,6 +9,31 @@ const router = express.Router();
  *   - name: Comments
  *     description: The Comments API for the Web Dev 2025 REST API
  */
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Comment:
+ *       type: object
+ *       required:
+ *         - comment
+ *         - postId
+ *         - owner
+ *       properties:
+ *         comment:
+ *           type: string
+ *           description: The comment content
+ *         postId:
+ *           type: string
+ *           description: The ID of the post the comment belongs to
+ *         owner:
+ *           type: string
+ *           description: The ID of the comment owner
+ *       example:
+ *         comment: "This is a comment"
+ *         postId: "60d0fe4f5311236168a109ca"
+ *         owner: "60d0fe4f5311236168a109ca"
+ */
 
 router.get("/", (req: Request, res: Response) => {
   if (!req.query.postId) {

@@ -6,6 +6,7 @@ import mongoose from "mongoose";
 
 class PostController extends BaseController<IPost> {
   constructor(model : mongoose.Model<IPost>) {
+
     //super(postsModel);
     super(model);
   }
