@@ -49,10 +49,12 @@ class CommentController extends BaseController<IComment> {
 
   async deleteComment(req: Request, res: Response) {
     const commentID = req.params._id;
+    console.log("this id is should be deleted:" + commentID); 
     try {
       const theComment = await commentsModel.findByIdAndDelete({
         _id: commentID,
       });
+      console.log(theComment);  
       if (!theComment) {
         res.status(404).send("Could not delete comment due to an error");
         return;
