@@ -8,6 +8,31 @@ const router = express.Router();
  *   - name: Posts
  *     description: The Posts API for the Web Dev 2025 REST API
  */
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Post:
+ *       type: object
+ *       required:
+ *         - title
+ *         - content
+ *         - owner
+ *       properties:
+ *         title:
+ *           type: string
+ *           description: The post title
+ *         content:
+ *           type: string
+ *           description: The post content
+ *         owner:
+ *           type: string
+ *           description: The ID of the post owner
+ *       example:
+ *         title: "Post Title"
+ *         content: "Post Content"
+ *         owner: "60d0fe4f5311236168a109ca"
+ */
 
 router.post("/", authMiddleware, (req: Request, res: Response) => {
   PostController.createPost(req, res);

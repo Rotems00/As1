@@ -67,23 +67,7 @@ class CommentController extends BaseController<IComment> {
       return;
     }
   }
-  /*
-  async create(req: Request, res: Response) {
-      const userId = req.query.userId;
-      console.log("*******************"+req.body);
-      const comment = {
-        owner : userId,
-        postId : req.body.postId,
-        comment : req.body.comment
-      }
-      if(comment.owner === undefined || comment.postId === undefined || comment.comment === undefined){
-        res.status(400).send("Missing Data");
-        return;
-      }
-      req.body = comment
-      return super.create(req, res);
-    }
-      */
+ 
 }
 
 export default new CommentController();
