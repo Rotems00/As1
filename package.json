@@ -20,10 +20,11 @@
   "main": "index.js",
   "scripts": {
     "start": "tsc && node ./dist/src/app.js",
-    "testPost": " tsc && jest --detectOpenHandles --forceExit posts.test.ts  --coverage",
-    "testAuth": "tsc && jest --detectOpenHandles --forceExit auth.test.ts --coverage",
+    "testPost": " tsc && jest --detectOpenHandles --forceExit posts.test.ts  ",
+    "testAuth": "tsc && jest --detectOpenHandles --forceExit auth.test.ts ",
     "testFile": "tsc && jest --detectOpenHandles --forceExit file.test.ts ",
-    "testComment": "tsc && jest --detectOpenHandles --forceExit comments.test.ts --coverage",
+    "testComment": "tsc && jest --detectOpenHandles --forceExit comments.test.ts ",
+
     "test": " tsc && jest --detectOpenHandles --forceExit --runInBand",
     "devstart": "nodemon ./src/app.ts",
     "lint": "eslint . --ext .ts"

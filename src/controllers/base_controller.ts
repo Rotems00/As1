@@ -10,6 +10,7 @@ export class BaseController<T> {
   
   async create(req: Request, res: Response) {
     try {
+      console.log(req.body);
       const newItem = await this.model.create(req.body);
       if (!newItem) {
         res.status(404).send("There has been Missing Data");
