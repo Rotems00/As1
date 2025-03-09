@@ -2,7 +2,7 @@
     const router = express.Router();
     import multer from "multer";
 
-    const base = process.env.DOMAIN_BASE + "/"; ;
+    const base = process.env.DOMAIN_BASE + "/"; 
     const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         cb(null, 'storage/')

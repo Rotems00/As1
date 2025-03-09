@@ -275,5 +275,10 @@ router.post("/refresh", authController.refresh);
  *               example: "Missing Token Secret"
  */
 router.post('/google-signin', authController.googleConnection);
-router.post('/myuser', authController.getUser);
+router.get('/myuser/:username', authMiddleware ,authController.getUser);
+router.put('/myuser/changePassword', authMiddleware ,authController.changePassword);
+router.delete('/myuser/deleteAccount',authMiddleware ,authController.deleteAccount);
+router.put('/myuser/updateAccount',authMiddleware ,authController.updateUser);
+router.post('/myuser/saveImg',authMiddleware ,authController.saveImg);
+router.get('/getImg',authMiddleware ,authController.getImg);
 export default router;

@@ -39,6 +39,7 @@ app.use("/Comments", commentsRoutes);
 app.use("/file", fileRoutes);
 app.use("/public", express.static("public"));
 app.use("/storage", express.static("storage"));
+app.use("/poststorage", express.static("poststorage"));
 
 // Swagger setup
 const options = {
