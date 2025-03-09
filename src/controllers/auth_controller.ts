@@ -1,5 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import userModel from "../modules/auth_model";
+import postModel from "../modules/posts_model";
+import commentsModel from "../modules/comments_model";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { OAuth2Client } from "google-auth-library";
@@ -30,11 +32,12 @@ const googleConnection = async (req: Request, res: Response) => {
     let user = await userModel.findOne({ email });
     
     if (!user) {
+      const username = email?.split('@')[0];
+    
       user = new userModel({
+        username,  // שם המשתמש יהיה האימייל ללא ה-@
         email,
-       
       });
-      await user.save();
     }
     const tokens = generateTokens(user._id.toString());
     if (!tokens) {
@@ -47,7 +50,9 @@ const googleConnection = async (req: Request, res: Response) => {
     await user.save();
     res.status(200).send({
       email: user.email,
+      username: user.username,
       _id: user._id,
+      imagePath : user.imagePath,
       accessToken: accessToken,
       refreshToken: refreshToken,
     });
@@ -153,8 +158,11 @@ const login = async (req: Request, res: Response) => {
     res.status(200).send({
       email: user.email,
       _id: user._id,
+      imagePath : user.imagePath,
+      username: user.username,
       accessToken: tokens.accessToken,
       refreshToken: tokens.refreshToken,
+
     });
     return;
   } catch (err) {
@@ -309,13 +317,13 @@ export const authMiddleware = (
   }
 };
 const getUser = async (req: Request, res: Response) => {
-  const userId = req.query.userId;
-  if (!userId) {
+  const { username } = req.params;  
+  if (!username) {
     res.status(400).send("Missing Data");
     return;
   }
   try {
-    const user = await userModel.findById(userId);
+    const user = await userModel.findOne( { username: username });
     if (!user) {
       res.status(404).send("Couldnt find user");
       return;
@@ -327,4 +335,140 @@ const getUser = async (req: Request, res: Response) => {
     res.status(400).send("problem find user request");
   }
 }
-export default { register, login, logout, refresh , googleConnection, getUser};
+const changePassword = async (req: Request, res: Response) => {
+  const { username , oldPassword, newPassword } = req.body;
+  if (!oldPassword || !newPassword) {
+    res.status(400).send("Missing Data");
+    return;
+  }
+  try {
+    
+    const user = await userModel.findOne({username : username});
+    if (!user) {
+      res.status(404).send("Couldnt find user");
+      return;
+    }
+    const validPassword = await bcrypt.compare(oldPassword, user.password);
+    if (!validPassword) {
+      res.status(400).send("invalid password");
+      return;
+    }
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(newPassword, salt);
+    user.password = hashedPassword;
+    await user.save();
+    res.status(200).send("Password Changed");
+    return;
+  } catch { 
+    res.status(400).send("problem change password request");
+  }
+}
+const deleteAccount = async (req: Request, res: Response) => {
+  const username  = req.params.username;
+  if (!username) {
+    res.status(400).send("Missing Data");
+    return;
+  }
+  try {
+    const user = await userModel
+      .findOneAndDelete({ username: username });
+    if (!user) {
+      res.status(404).send("Couldnt find user");
+      return;
+    }
+    const userPosts = await postModel.deleteMany({ owner: username });
+    const userComments = await commentsModel.deleteMany({ owner: username });
+    if (!userPosts) {
+      res.status(404).send("Couldnt find user posts");
+      return;
+    }
+    if (!userComments) {
+      res.status(404).send("Couldnt find user comments");
+      return;
+    }
+  } catch {
+    res.status(400).send("problem delete account request");
+    return;
+  }
+  res.status(200).send("Account Deleted");
+  return; 
+}
+
+
+const updateUser = async (req: Request, res: Response) => {
+  const { oldUsername , newUsername } = req.body;
+  if (!oldUsername || !newUsername) {
+    res.status(400).send("Missing Data");
+    return;
+  }
+  try {
+    const user = await userModel.findOne({ username:oldUsername });
+    if (!user) {
+      res.status(404).send("Couldnt find user");
+      return;
+    }
+    user.username = newUsername;
+    await user.save();
+    const userPosts = await postModel.updateMany({ owner: oldUsername }, { owner: newUsername });
+    const userComments = await commentsModel.updateMany({ owner: oldUsername }, { owner: newUsername });
+    if (!userPosts || !userComments) {
+      res.status(404).send("Couldnt find user posts or comments");
+      return;
+    }
+  } catch {
+    res.status(400).send("problem update user request");
+    return;
+  }
+  res.status(200).send("User Updated");
+  return;
+}
+const saveImg = async (req: Request, res: Response) => {
+
+  const username = req.body.username;
+  const file = req.body.file;
+  if (!username || !file) {
+    res.status(400).send("Missing Data");
+    return;
+  }
+  
+  try {
+
+    const user = await userModel.findOne({ username: username });
+    if (!user) {
+      res.status(404).send("Couldnt find user");
+      return;
+    }
+    user.imagePath = file;
+    await user.save();
+    res.status(200).send(file);
+    return;
+  } catch {
+    res.status(400).send("problem save img request");
+    return;
+  }
+}
+
+const getImg = async (req: Request, res: Response) => {
+  const username = req.query.username;
+  console.log(username);
+  if (!username) {
+    res.status(400).send("Missing Data");
+    return;
+  }
+  try {
+    const user = await userModel.findOne({ username:
+      username });
+    if (!user) {
+      res.status(404).send("Couldnt find user");
+      return;
+    }
+    console.log(user.imagePath);
+    res.status(200).send(user.imagePath);
+    return;
+  } catch {
+    res.status(400).send("problem get img request");
+    return;
+  }
+}
+
+export default { register, login, logout, refresh , googleConnection, getUser,changePassword , deleteAccount, updateUser,saveImg , getImg};

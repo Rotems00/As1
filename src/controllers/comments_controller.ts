@@ -27,7 +27,11 @@ class CommentController extends BaseController<IComment> {
 
   async updateComment(req: Request, res: Response) {
     const commentID = req.params._id;
-    const newContent = req.body.comment;
+    const newContent = req.body.comment; 
+
+    console.log("this id is should be updated:" + commentID);
+    console.log("this is the new content:" + newContent);
+  
     try {
       const commentToUpdate = await commentsModel.findByIdAndUpdate(
         commentID,
