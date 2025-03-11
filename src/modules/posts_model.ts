@@ -16,6 +16,7 @@ export interface IPost {
   createdAt?: Date;
   updatedAt?: Date;
   rank?: Rank; // The rank will be a number from 1 to 5
+  numOfComments: number;  
 }
 
 const post_Schema = new mongoose.Schema<IPost>(
@@ -43,6 +44,10 @@ const post_Schema = new mongoose.Schema<IPost>(
     rank: {
       type: Number,
       default: 1,
+    },
+    numOfComments: {
+      type: Number,
+      default: 0,
     },
   },
   {

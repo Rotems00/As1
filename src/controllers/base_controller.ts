@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { Model } from "mongoose";
+import postModel from "../modules/posts_model";
 
 export class BaseController<T> {
   model: Model<T>;
@@ -12,6 +13,7 @@ export class BaseController<T> {
     try {
       console.log(req.body);
       const newItem = await this.model.create(req.body);
+      await postModel.updateOne({ _id :  req.body.postId },{ $inc: { numOfComments: 1 }});
       if (!newItem) {
         res.status(404).send("There has been Missing Data");
         return;

@@ -67,7 +67,8 @@ const googleConnection = async (req: Request, res: Response) => {
 
 
 const register = async (req: Request, res: Response) => {
-  const { username, email, password } = req.body;
+  const { username, email, password  } = req.body;
+  const imgUrl = req.body.imgUrl || " ";
   if (
     !email ||
     !password ||
@@ -89,6 +90,7 @@ const register = async (req: Request, res: Response) => {
       username: username,
       email: email,
       password: hashedPassword,
+      imagePath : imgUrl,
     });
     res.status(201).send(newUser);
     return;
@@ -364,7 +366,8 @@ const changePassword = async (req: Request, res: Response) => {
   }
 }
 const deleteAccount = async (req: Request, res: Response) => {
-  const username  = req.params.username;
+  const username  = req.query.username;
+  console.log(username);
   if (!username) {
     res.status(400).send("Missing Data");
     return;
@@ -376,7 +379,9 @@ const deleteAccount = async (req: Request, res: Response) => {
       res.status(404).send("Couldnt find user");
       return;
     }
+    
     const userPosts = await postModel.deleteMany({ owner: username });
+    
     const userComments = await commentsModel.deleteMany({ owner: username });
     if (!userPosts) {
       res.status(404).send("Couldnt find user posts");
@@ -471,4 +476,15 @@ const getImg = async (req: Request, res: Response) => {
   }
 }
 
+export const decodeToken = (token: string): string | null => {
+  try {
+    if (!process.env.TOKEN_SECRET) {
+      throw new Error("Missing Token Secret");
+    }
+    const decoded = jwt.verify(token, process.env.TOKEN_SECRET) as TokenPayload;
+    return decoded._id;  // Return the user ID from the token payload
+  } catch (error) {
+    return null; // If there's an error, return null
+  }
+};
 export default { register, login, logout, refresh , googleConnection, getUser,changePassword , deleteAccount, updateUser,saveImg , getImg};
