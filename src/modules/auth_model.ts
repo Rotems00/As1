@@ -30,7 +30,10 @@ const userSchema = new mongoose.Schema({
     required: false,
     default: "",
   },
-  
+  likedPosts: {
+    type: [String],
+    default: [],
+  },
 });
 
 const userModel = mongoose.model("Users", userSchema);

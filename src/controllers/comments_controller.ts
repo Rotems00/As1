@@ -1,4 +1,5 @@
 import commentsModel, { IComment } from "../modules/comments_model";
+import postModel from "../modules/posts_model";
 import { Request, Response } from "express";
 import { BaseController } from "./base_controller";
 
@@ -57,12 +58,12 @@ class CommentController extends BaseController<IComment> {
     try {
       const theComment = await commentsModel.findByIdAndDelete({
         _id: commentID,
-      });
-      console.log(theComment);  
+      });   
       if (!theComment) {
         res.status(404).send("Could not delete comment due to an error");
         return;
       } else {
+        await postModel.updateOne({ _id: theComment.postId },{ $inc: { numOfComments: -1 }});
         res.status(200).send(theComment);
         return;
       }

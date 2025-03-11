@@ -271,9 +271,10 @@ router.put(
  *               example: "Internal Server Error"
  */
 
-router.post("/create", (req, res) => PostController.createPost(req, res));
-router.delete("/delete/:_id", (req, res) => PostController.deletePost(req, res));
-router.put("/like/:_id", (req, res) => PostController.addLike(req, res));
-router.put("/unlike/:_id", (req, res) => PostController.unLike(req, res));
-router.put("/update/:_id", (req, res) => PostController.updatePost(req, res));
+router.post("/create",authMiddleware ,(req, res) => PostController.createPost(req, res));
+router.delete("/delete/:_id", authMiddleware ,(req, res) => PostController.deletePost(req, res));
+router.put("/like/:_id",authMiddleware ,(req, res) => PostController.addLike(req, res));
+router.put("/unlike/:_id",authMiddleware ,(req, res) => PostController.unLike(req, res));
+router.put("/update/:_id",authMiddleware ,(req, res) => PostController.updatePost(req, res));
+router.get("/isLiked/:_id",authMiddleware ,(req, res) => PostController.isLiked(req, res));
 export default router;
