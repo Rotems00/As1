@@ -14,14 +14,20 @@ class PostController extends BaseController<IPost> {
   }
 
   async createPost(req: Request, res: Response) {
+    let imageUrl;
+    if(req.body.imageUrl.trim() !== "" || req.body.imageUrl !== undefined){
+       imageUrl = req.body.imageUrl;
+       console.log(imageUrl);
+       console.log(req.body);
+    }
     try {
-      // Generate the image URL by calling the generateImage function
-      const imageUrl = await generateImage(req.body.title);
+      if (req.body.imageUrl.trim() == "" || req.body.imageUrl == undefined) {
+      imageUrl = await generateImage(req.body.title);
   
       if (!imageUrl) {
         res.status(500).send({ error: "Failed to generate image" });
         return;
-      }
+      }}
       // Prepare the post data, including the generated image URL
       const post = {
         title: req.body.title,
@@ -48,6 +54,7 @@ class PostController extends BaseController<IPost> {
       return;
     }
   }
+
 async deletePost(req: Request, res: Response) {
     const postID = req.params._id;
     try {
