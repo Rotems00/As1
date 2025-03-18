@@ -30,7 +30,8 @@ export async function generateImage(movieName: string): Promise<string | null> {
             const filename = `${Date.now()}_${movieName.replace(/[^a-z0-9]/gi, '_')}.png`;
 
             // השתמש ב-path.resolve כדי להבטיח שהנתיב לתיקיית storage יהיה נכון
-            const uploadDir = path.resolve(__dirname, '../..', 'poststorage');  // נתיב לתיקיית storage הכללית
+            const baseDir = '/home/st111/As1';
+            const uploadDir = path.resolve(baseDir, 'poststorage');
 
             if (!fs.existsSync(uploadDir)) {
                 fs.mkdirSync(uploadDir, { recursive: true });

@@ -14,46 +14,80 @@ class PostController extends BaseController<IPost> {
   }
 
   async createPost(req: Request, res: Response) {
-    let imageUrl;
-    if(req.body.imageUrl.trim() !== "" || req.body.imageUrl !== undefined){
-       imageUrl = req.body.imageUrl;
-       console.log(imageUrl);
-       console.log(req.body);
-    }
+    console.log("Create Post - Received Request");
+    console.log("Full Request Body:", req.body);
+
     try {
-      if (req.body.imageUrl.trim() == "" || req.body.imageUrl == undefined) {
-      imageUrl = await generateImage(req.body.title);
-  
-      if (!imageUrl) {
-        res.status(500).send({ error: "Failed to generate image" });
-        return;
-      }}
-      // Prepare the post data, including the generated image URL
-      const post = {
-        title: req.body.title,
-        content: req.body.content,
-        owner: req.body.owner,
-        rank: req.body.rank,
-        imageUrl: imageUrl,  // Add the image URL here
-        
-      };
-      
-      // Check if required fields are provided
-      if (!post.owner || !post.content || !post.title) {
-        res.status(400).send("Missing Data");
+      // Destructure request body with defaults
+      const { 
+        title = '', 
+        content = '', 
+        owner = '', 
+        rank = null, 
+        imgUrl = '' 
+      } = req.body;
+
+      // Validate required fields
+      const missingFields: string[] = [];
+      if (!owner) missingFields.push('owner');
+      if (!content) missingFields.push('content');
+      if (!rank) missingFields.push('rank');
+
+      if (missingFields.length > 0) {
+        res.status(400).json({
+          error: "Missing required fields",
+          missingFields
+        });
         return;
       }
-  
+
+      // Image URL handling
+      let imageUrl = imgUrl;
+      console.log('Image URL:', imageUrl);
+      if (!imageUrl) {
+        try {
+          // Generate image if no URL provided
+          imageUrl = await generateImage(title || 'Default Post');
+        } catch (imageError) {
+          console.error('Image generation error:', imageError);
+          imageUrl = ''; // Fallback to empty string
+        }
+      }
+
+      // Prepare post data
+      const post = {
+        title: title || 'Untitled Post',
+        content: content,
+        owner,
+        rank,
+        imageUrl
+      };
+
+      // Log the final post data before creation
+      console.log('Creating Post:', post);
+
       // Save the new post to the database
       const newPost = await postsModel.create(post);
-      res.status(201).send(newPost); // Send the created post as the response
+      
+      console.log('Post Created Successfully:', newPost);
+      res.status(201).json(newPost);
       return;
+
     } catch (error) {
-      console.error("Error creating post:", error);
-      res.status(500).send({ error: "Internal Server Error" });
+      console.error('Detailed Error in Post Creation:', {
+        error,
+        errorName: error instanceof Error ? error.name : 'Unknown Error',
+        errorMessage: error instanceof Error ? error.message : 'No error message',
+        stack: error instanceof Error ? error.stack : 'No stack trace'
+      }
+    );
+      res.status(500).json({ 
+        error: 'Internal Server Error',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      });
       return;
     }
-  }
+}
 
 async deletePost(req: Request, res: Response) {
     const postID = req.params._id;

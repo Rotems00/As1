@@ -1,68 +1,190 @@
 {
-  "dependencies": {
-    "axios": "^1.8.1",
-    "bcrypt": "^5.1.1",
-    "body-parser": "^1.20.3",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.5",
-    "express": "^4.21.2",
-    "fs": "^0.0.1-security",
-    "google-auth-library": "^9.15.1",
-    "jsonwebtoken": "^9.0.2",
-    "mongodb": "^6.11.0",
-    "mongoose": "^8.8.4",
-    "multer": "^1.4.5-lts.1",
-    "node": "^18.20.5",
-    "path": "^0.12.7",
-    "rest": "^2.0.0"
-  },
+  
   "name": "ourapp",
+  
   "version": "1.0.0",
+  
   "description": "\"Rotems and Shons app\"",
+  
   "main": "index.js",
+  
   "scripts": {
-    "start": "tsc && node ./dist/src/app.js",
-    "testPost": " tsc && jest --detectOpenHandles --forceExit posts.test.ts  ",
-    "testAuth": "tsc && jest --detectOpenHandles --forceExit auth.test.ts ",
-    "testFile": "tsc && jest --detectOpenHandles --forceExit file.test.ts ",
-    "testComment": "tsc && jest --detectOpenHandles --forceExit comments.test.ts ",
-    "test": " tsc && jest --detectOpenHandles --forceExit --runInBand",
-    "devstart": "nodemon ./src/app.ts",
-    "lint": "eslint . --ext .ts"
+  
+    
+  "prod":  "cp .env_prod .env&&tsc -p tsconfig_prod.json  && pm2 restart ecosystem.config.js --env production",
+  
+  "prod2": "cp .env_prod .env&&tsc -p tsconfig_prod.json && node dist/src/app.js",
+
+  "start": "tsc && node ./dist/src/app.js",
+  
+    
+  "testPost": " tsc && jest --detectOpenHandles --forceExit posts.test.ts  ",
+  
+    
+  "testAuth": "tsc && jest --detectOpenHandles --forceExit auth.test.ts ",
+  
+    
+  "testFile": "tsc && jest --detectOpenHandles --forceExit file.test.ts ",
+  
+    
+  "testComment": "tsc && jest --detectOpenHandles --forceExit comments.test.ts ",
+  
+    
+  "test": " tsc && jest --detectOpenHandles --forceExit --runInBand",
+  
+    
+  "devstart": "nodemon ./src/app.ts",
+  
+    
+  "lint": "eslint . --ext .ts"
+  
   },
+  
   "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Rotems00/As1.git"
+  
+    
+  "type": "git",
+  
+    
+  "url": "git+https://github.com/Rotems00/As1.git"
+  
   },
+  
   "author": "Shon Hason & Rotem Ziv",
+  
   "license": "ISC",
+  
   "bugs": {
-    "url": "https://github.com/Rotems00/As1/issues"
+  
+    
+  "url": "https://github.com/Rotems00/As1/issues"
+  
   },
+  
   "homepage": "https://github.com/Rotems00/As1#readme",
+  
+  "dependencies": {
+  
+    
+  "axios": "^1.8.1",
+  
+    
+  "bcrypt": "^5.1.1",
+  
+    
+  "body-parser": "^1.20.3",
+  
+    
+  "cors": "^2.8.5",
+  
+    
+  "dotenv": "^16.4.5",
+  
+    
+  "express": "^4.21.2",
+  
+    
+  "fs": "^0.0.1-security",
+  
+    
+  "google-auth-library": "^9.15.1",
+  
+    
+  "https": "^1.0.0",
+  
+    
+  "jsonwebtoken": "^9.0.2",
+  
+    
+  "mongodb": "^6.11.0",
+  
+    
+  "mongoose": "^8.8.4",
+  
+    
+  "multer": "^1.4.5-lts.1",
+  
+    
+  "node": "^18.20.7",
+  
+    
+  "path": "^0.12.7",
+  
+    
+  "rest": "^2.0.0",
+  
+    
+  "swagger-jsdoc": "^6.2.8",
+  
+    
+  "swagger-ui-express": "^5.0.1",
+  
+    
+  "typescript": "^5.7.2"
+  
+  },
+  
   "devDependencies": {
-    "@eslint/js": "^9.16.0",
-    "@types/bcrypt": "^5.0.2",
-    "@types/body-parser": "^1.19.5",
-    "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.0",
-    "@types/jest": "^29.5.14",
-    "@types/jsonwebtoken": "^9.0.7",
-    "@types/multer": "^1.4.12",
-    "@types/node": "^22.9.0",
-    "@types/supertest": "^6.0.2",
-    "@types/swagger-jsdoc": "^6.0.4",
-    "@types/swagger-ui-express": "^4.1.7",
-    "eslint": "^9.16.0",
-    "globals": "^15.13.0",
-    "install": "^0.13.0",
-    "jest": "^29.7.0",
-    "supertest": "^7.0.0",
-    "swagger-jsdoc": "^6.2.8",
-    "swagger-ui-express": "^5.0.1",
-    "ts-jest": "^29.2.5",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.2",
-    "typescript-eslint": "^8.17.0"
+  
+    
+  "@eslint/js": "^9.16.0",
+  
+    
+  "@types/bcrypt": "^5.0.2",
+  
+    
+  "@types/body-parser": "^1.19.5",
+  
+    
+  "@types/cors": "^2.8.17",
+  
+    
+  "@types/express": "^5.0.0",
+  
+    
+  "@types/jest": "^29.5.14",
+  
+    
+  "@types/jsonwebtoken": "^9.0.7",
+  
+    
+  "@types/multer": "^1.4.12",
+  
+    
+  "@types/node": "^22.9.0",
+  
+    
+  "@types/supertest": "^6.0.2",
+  
+    
+  "@types/swagger-jsdoc": "^6.0.4",
+  
+    
+  "@types/swagger-ui-express": "^4.1.7",
+  
+    
+  "eslint": "^9.16.0",
+  
+    
+  "globals": "^15.13.0",
+  
+    
+  "install": "^0.13.0",
+  
+    
+  "jest": "^29.7.0",
+  
+    
+  "supertest": "^7.0.0",
+  
+    
+  "ts-jest": "^29.2.5",
+  
+    
+  "ts-node": "^10.9.2",
+  
+    
+  "typescript-eslint": "^8.17.0"
+  
   }
 }
