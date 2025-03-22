@@ -5,12 +5,14 @@ import commentModel from "../modules/comments_model";
 import { Express } from "express";
 import userModel from "../modules/auth_model";
 import postsModel from "../modules/posts_model";
+import { console } from "inspector";
 let app: Express;
 
 const testComment = {
-  owner: "Test Owner",
-  comment: "Test Content",
   postId: "",
+  comment: "Test Comment",
+  owner: "ShonHason"
+  
 };
 let commentID = "";
 type UserInfo = {
@@ -19,12 +21,25 @@ type UserInfo = {
   _id?: string;
   accessToken?: string;
   refreshToken?: string;
+  username?:  string; 
 };
-
+const userLogin = {
+  usernameOrEmail: "ShonHason",
+  password: "123456",
+};
 const userInfo: UserInfo = {
   email: "ShonHason@gmail.com",
   password: "123456",
+  username: "ShonHason",
 };
+const post = {
+  title: "Test Post",
+  content: "Test Content",
+  owner: userInfo.username,
+  rank : 3,
+  imgUrl:'PostImgUrl',
+}
+
 beforeAll(async () => {
   app = await appInit.initApplication();
   await commentModel.deleteMany();
@@ -32,14 +47,17 @@ beforeAll(async () => {
   await postsModel.deleteMany();
 
   await request(app).post("/auth/register").send(userInfo);
-  const response = await request(app).post("/auth/login").send(userInfo);
+  const response = await request(app).post("/auth/login").send(userLogin);
+
   userInfo._id = response.body._id;
   userInfo.accessToken = response.body.accessToken;
   userInfo.refreshToken = response.body.refreshToken;
+
   await request(app)
-    .post("/Posts")
+    .post("/Posts/create")
     .set({ Authorization: "jwt " + userInfo.accessToken })
-    .send({ title: "Test Post", content: "Test Content" });
+    .send(post);
+  console.log(response.body);
   testComment.postId = response.body._id;
 });
 
@@ -53,6 +71,7 @@ describe("comments tests", () => {
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(0);
   });
+
   test("Test 2 - CREATE A COMMENT", async () => {
     const response = await request(app)
       .post("/Comments")
@@ -65,6 +84,7 @@ describe("comments tests", () => {
     expect(response.body.comment).toBe(testComment.comment);
     expect(response.body.postId).toBe(testComment.postId);
     commentID = response.body._id;
+
     const response2 = await request(app)
       .post("/Comments")
       .set({
@@ -77,15 +97,14 @@ describe("comments tests", () => {
       });
     expect(response2.status).toBe(201);
   });
+
   test("Test 3- GET ALL COMMENTS-FULL", async () => {
-    const response = await request(app).get("/Comments");
+    const response = await request(app).get("/Comments/");
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(2);
   });
   test("GET /comments on specific postId", async () => {
-    const response = await request(app)
-      .get("/Comments")
-      .query({ postId: testComment.postId });
+    const response = await request(app).get(`/Comments/?postId=${testComment.postId}`);
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(2);
   });
@@ -96,7 +115,7 @@ describe("comments tests", () => {
 
   test("Test 5 - GET A COMMENT BY POST ID", async () => {
     const response = await request(app).get(
-      `/Comments/?post_id=${testComment.postId}`
+      `/Comments/?postId=${testComment.postId}`
     );
     expect(response.status).toBe(200);
     expect(response.body).toHaveLength(2);

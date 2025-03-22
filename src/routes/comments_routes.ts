@@ -28,11 +28,11 @@ const router = express.Router();
  *           description: The ID of the post the comment belongs to
  *         owner:
  *           type: string
- *           description: The ID of the comment owner
+ *           description: The username of the comment owner
  *       example:
  *         comment: "This is a comment"
  *         postId: "60d0fe4f5311236168a109ca"
- *         owner: "60d0fe4f5311236168a109ca"
+ *         owner: "johndoe"
  */
 
 router.get("/", (req: Request, res: Response) => {
@@ -58,7 +58,7 @@ router.get("/", (req: Request, res: Response) => {
  *         name: owner
  *         schema:
  *           type: string
- *         description: The ID of the owner to filter comments by
+ *         description: The username of the owner to filter comments by
  *     responses:
  *       200:
  *         description: A list of comments
@@ -75,19 +75,19 @@ router.get("/", (req: Request, res: Response) => {
  *                   postId:
  *                     type: string
  *                     example: "60d0fe4f5311236168a109ca"
- *                   content:
+ *                   comment:
  *                     type: string
  *                     example: "This is a comment"
  *                   owner:
  *                     type: string
- *                     example: "60d0fe4f5311236168a109ca"
+ *                     example: "johndoe"
  *       400:
- *         description: Bad request
+ *         description: Bad request or no comments found
  *         content:
  *           application/json:
  *             schema:
  *               type: string
- *               example: "Bad Request"
+ *               example: "There are not comments on this post"
  *       500:
  *         description: Internal server error
  *         content:
@@ -97,19 +97,18 @@ router.get("/", (req: Request, res: Response) => {
  *               example: "Internal Server Error"
  */
 
-
 router.get("/:_id", (req: Request, res: Response) => {
   commentController.getById(req, res);
 });
 /**
  * @swagger
- * /comments/{id}:
+ * /comments/{_id}:
  *   get:
  *     summary: Get a comment by ID
  *     tags: [Comments]
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: _id
  *         required: true
  *         schema:
  *           type: string
@@ -128,12 +127,12 @@ router.get("/:_id", (req: Request, res: Response) => {
  *                 postId:
  *                   type: string
  *                   example: "60d0fe4f5311236168a109ca"
- *                 content:
+ *                 comment:
  *                   type: string
  *                   example: "This is a comment"
  *                 owner:
  *                   type: string
- *                   example: "60d0fe4f5311236168a109ca"
+ *                   example: "johndoe"
  *       400:
  *         description: Bad request
  *         content:
@@ -148,13 +147,6 @@ router.get("/:_id", (req: Request, res: Response) => {
  *             schema:
  *               type: string
  *               example: "Comment not found"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: string
- *               example: "Internal Server Error"
  */
 
 router.post("/", authMiddleware, (req: Request, res: Response) => {
@@ -175,15 +167,22 @@ router.post("/", authMiddleware, (req: Request, res: Response) => {
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - owner
+ *               - comment
+ *               - postId
  *             properties:
  *               owner:
  *                 type: string
- *                 example: "60d0fe4f5311236168a109ca"
+ *                 description: Username of the comment owner
+ *                 example: "johndoe"
  *               comment:
  *                 type: string
+ *                 description: The comment content
  *                 example: "This is a comment"
  *               postId:
  *                 type: string
+ *                 description: ID of the post being commented on
  *                 example: "60d0fe4f5311236168a109ca"
  *     responses:
  *       201:
@@ -198,7 +197,7 @@ router.post("/", authMiddleware, (req: Request, res: Response) => {
  *                   example: "60d0fe4f5311236168a109ca"
  *                 owner:
  *                   type: string
- *                   example: "60d0fe4f5311236168a109ca"
+ *                   example: "johndoe"
  *                 comment:
  *                   type: string
  *                   example: "This is a comment"
@@ -212,6 +211,20 @@ router.post("/", authMiddleware, (req: Request, res: Response) => {
  *             schema:
  *               type: string
  *               example: "Bad Request"
+ *       401:
+ *         description: Missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "missing token"
+ *       403:
+ *         description: Invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "Invalid Token"
  *       500:
  *         description: Internal server error
  *         content:
@@ -228,7 +241,7 @@ router.put(
 );
 /**
  * @swagger
- * /comments/{id}:
+ * /comments/{_id}:
  *   put:
  *     summary: Update a comment
  *     tags: [Comments]
@@ -236,7 +249,7 @@ router.put(
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: _id
  *         required: true
  *         schema:
  *           type: string
@@ -247,16 +260,13 @@ router.put(
  *         application/json:
  *           schema:
  *             type: object
+ *             required:
+ *               - comment
  *             properties:
  *               comment:
  *                 type: string
- *                 example: "Pizza is the best"
- *               postId:
- *                 type: string
- *                 example: "60d0fe4f5311236168a109ca"
- *               owner:
- *                 type: string
- *                 example: "60d0fe4f5311236168a109ca"
+ *                 description: The updated comment content
+ *                 example: "This is an updated comment"
  *     responses:
  *       200:
  *         description: Comment updated successfully
@@ -270,13 +280,13 @@ router.put(
  *                   example: "60d0fe4f5311236168a109ca"
  *                 comment:
  *                   type: string
- *                   example: "Pizza is the best"
+ *                   example: "This is an updated comment"
  *                 postId:
  *                   type: string
  *                   example: "60d0fe4f5311236168a109ca"
  *                 owner:
  *                   type: string
- *                   example: "60d0fe4f5311236168a109ca"
+ *                   example: "johndoe"
  *       400:
  *         description: Bad request
  *         content:
@@ -284,20 +294,27 @@ router.put(
  *             schema:
  *               type: string
  *               example: "Bad Request"
+ *       401:
+ *         description: Missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "missing token"
+ *       403:
+ *         description: Invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "Invalid Token"
  *       404:
  *         description: Comment not found
  *         content:
  *           application/json:
  *             schema:
  *               type: string
- *               example: "Comment not found"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: string
- *               example: "Internal Server Error"
+ *               example: "COULD NOT UPDATE COMMENT DUE TO AN ERROR!"
  */
 
 router.delete("/:_id", authMiddleware, (req: Request, res: Response) => {
@@ -305,7 +322,7 @@ router.delete("/:_id", authMiddleware, (req: Request, res: Response) => {
 });
 /**
  * @swagger
- * /comments/{id}:
+ * /comments/{_id}:
  *   delete:
  *     summary: Delete a comment
  *     tags: [Comments]
@@ -313,7 +330,7 @@ router.delete("/:_id", authMiddleware, (req: Request, res: Response) => {
  *       - bearerAuth: []
  *     parameters:
  *       - in: path
- *         name: id
+ *         name: _id
  *         required: true
  *         schema:
  *           type: string
@@ -324,8 +341,7 @@ router.delete("/:_id", authMiddleware, (req: Request, res: Response) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: string
- *               example: "Comment deleted successfully"
+ *               $ref: '#/components/schemas/Comment'
  *       400:
  *         description: Bad request
  *         content:
@@ -333,24 +349,27 @@ router.delete("/:_id", authMiddleware, (req: Request, res: Response) => {
  *             schema:
  *               type: string
  *               example: "Bad Request"
+ *       401:
+ *         description: Missing token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "missing token"
+ *       403:
+ *         description: Invalid token
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: string
+ *               example: "Invalid Token"
  *       404:
  *         description: Comment not found
  *         content:
  *           application/json:
  *             schema:
  *               type: string
- *               example: "Comment not found"
- *       500:
- *         description: Internal server error
- *         content:
- *           application/json:
- *             schema:
- *               type: string
- *               example: "Internal Server Error"
+ *               example: "Could not delete comment due to an error"
  */
-
-router.get("/getCommentsByPostId/:postId", (req: Request, res: Response) => {
-  commentController.readAllCommentsOnSpecifiecPost(req, res);
-});
 
 export default router;
