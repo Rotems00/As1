@@ -2,4 +2,5 @@ node_modules/
 .env
 dist/
 storage/
+coverage/
 poststorage/
