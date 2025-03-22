@@ -52,6 +52,7 @@ class PostController extends BaseController<IPost> {
             console.error('Image generation error:', imageError);
             imageUrl = ''; // Fallback to empty string
           }
+
       }
 
       // Prepare post data
@@ -69,6 +70,8 @@ class PostController extends BaseController<IPost> {
       // Save the new post to the database
       const newPost = await postsModel.create(post);
 
+
+
       console.log('Post Created Successfully:', newPost);
       res.status(201).json(newPost);
       return;
@@ -80,14 +83,16 @@ class PostController extends BaseController<IPost> {
         errorMessage: error instanceof Error ? error.message : 'No error message',
         stack: error instanceof Error ? error.stack : 'No stack trace'
       }
+
       );
       res.status(500).json({
+
         error: 'Internal Server Error',
         details: error instanceof Error ? error.message : 'Unknown error'
       });
       return;
     }
-  }
+}
 
   async deletePost(req: Request, res: Response) {
     const postID = req.params._id;

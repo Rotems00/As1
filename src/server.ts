@@ -15,31 +15,37 @@ dotenv.config();
 
 const app = express();
 
-// Use the cors middleware to handle CORS with proper settings.
-app.use(
-  cors({
-    origin: "*", // Or specify your front-end origin (e.g., "http://localhost:5173")
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
-  })
-);
-
-// Optionally, explicitly handle OPTIONS (preflight) requests for all routes.
-app.options("*", (req, res) => {
-  res.sendStatus(200);
-});
-
-app.use("/media", express.static("public"));
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+}));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use("/media", express.static("public"));
+app.use("/public", express.static("public"));
+app.use("/storage", express.static("storage"));
+app.use("/poststorage", express.static("poststorage"));
+app.use(express.static("front"));
+
 
 app.use("/auth", authRoutes);
 app.use("/Posts", postsRoutes);
 app.use("/Comments", commentsRoutes);
 app.use("/file", fileRoutes);
-app.use("/public", express.static("public"));
-app.use("/storage", express.static("storage"));
-app.use("/poststorage", express.static("poststorage"));
+
+
+app.use(express.static('build'));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.resolve(__dirname, '../../front/index.html'));
+});
+
+app.options("*", (req, res) => {
+  res.sendStatus(200);
+});
+
 
 // Swagger setup
 const options = {
@@ -50,7 +56,8 @@ const options = {
       version: "1.0.0",
       description: "REST server including authentication using JWT",
     },
-    servers: [{ url: "http://localhost:4000" }],
+    servers: [{ url: "http://localhost:" + process.env.PORT },{ url: "http://10.10.246.3" },{ url: "https://10.10.246.3" },
+    ],
   },
   apis: ["./src/routes/*.ts"],
 };

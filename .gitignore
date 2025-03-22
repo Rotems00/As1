@@ -4,3 +4,4 @@ dist/
 storage/
 coverage/
 poststorage/
+.env_prod
