@@ -9,7 +9,7 @@ class CommentController extends BaseController<IComment> {
   }
 
   async readAllCommentsOnSpecifiecPost(req: Request, res: Response) {
-    const postID = req.params.postId;
+    const postID = req.query.postId;//שיניתי מפרמס יכול להיות שאצטרך להחזיר
     console.log("Method : Read All Comments on a specific post");
     console.log(postID);
     try {

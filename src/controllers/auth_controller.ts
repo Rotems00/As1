@@ -137,12 +137,12 @@ const login = async (req: Request, res: Response) => {
     const user = await userModel.findOne({ $or: [{ email: usernameOrEmail }, { username: usernameOrEmail }] });
     if (!user) {
 
-      res.status(400).send("invalid email/username or password");
+      res.status(400).send("Check email/username or password");
       return;
     }
     const validPassword = await bcrypt.compare(password, user.password);
     if (!validPassword) {
-      res.status(400).send("invalid email/username or password");
+      res.status(400).send("Check email/username or password");
       return;
     }
     const tokens = generateTokens(user._id.toString());
@@ -320,7 +320,7 @@ export const authMiddleware = (
 };
 const getUser = async (req: Request, res: Response) => {
   const { username } = req.params;  
-  if (!username) {
+  if (username.trim().length === 0|| !username) {
     res.status(400).send("Missing Data");
     return;
   }
@@ -339,7 +339,7 @@ const getUser = async (req: Request, res: Response) => {
 }
 const changePassword = async (req: Request, res: Response) => {
   const { username , oldPassword, newPassword } = req.body;
-  if (!oldPassword || !newPassword) {
+  if (!oldPassword || !newPassword || !username) {
     res.status(400).send("Missing Data");
     return;
   }
@@ -352,7 +352,7 @@ const changePassword = async (req: Request, res: Response) => {
     }
     const validPassword = await bcrypt.compare(oldPassword, user.password);
     if (!validPassword) {
-      res.status(400).send("invalid password");
+      res.status(400).send("Invalid Password");
       return;
     }
     const salt = await bcrypt.genSalt(10);
@@ -380,17 +380,11 @@ const deleteAccount = async (req: Request, res: Response) => {
       return;
     }
     
-    const userPosts = await postModel.deleteMany({ owner: username });
+    await postModel.deleteMany({ owner: username });
     
-    const userComments = await commentsModel.deleteMany({ owner: username });
-    if (!userPosts) {
-      res.status(404).send("Couldnt find user posts");
-      return;
-    }
-    if (!userComments) {
-      res.status(404).send("Couldnt find user comments");
-      return;
-    }
+    await commentsModel.deleteMany({ owner: username });
+    
+
   } catch {
     res.status(400).send("problem delete account request");
     return;
@@ -414,12 +408,9 @@ const updateUser = async (req: Request, res: Response) => {
     }
     user.username = newUsername;
     await user.save();
-    const userPosts = await postModel.updateMany({ owner: oldUsername }, { owner: newUsername });
-    const userComments = await commentsModel.updateMany({ owner: oldUsername }, { owner: newUsername });
-    if (!userPosts || !userComments) {
-      res.status(404).send("Couldnt find user posts or comments");
-      return;
-    }
+    await postModel.updateMany({ owner: oldUsername }, { owner: newUsername });
+    await commentsModel.updateMany({ owner: oldUsername }, { owner: newUsername });
+
   } catch {
     res.status(400).send("problem update user request");
     return;
@@ -467,7 +458,6 @@ const getImg = async (req: Request, res: Response) => {
       res.status(404).send("Couldnt find user");
       return;
     }
-    console.log(user.imagePath);
     res.status(200).send(user.imagePath);
     return;
   } catch {
