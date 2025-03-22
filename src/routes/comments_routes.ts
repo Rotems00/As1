@@ -36,7 +36,7 @@ const router = express.Router();
  */
 
 router.get("/", (req: Request, res: Response) => {
-  if (!req.query.postId) {
+  if (!req.query.post_id) {
     commentController.getAll(req, res);
   } else {
     commentController.readAllCommentsOnSpecifiecPost(req, res);
